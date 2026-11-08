@@ -1,28 +1,55 @@
 <!DOCTYPE html>
 <html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Nota Arena – Müzik Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}body{margin:0;font:16px system-ui,sans-serif;background:radial-gradient(circle at 20% 0,#2a1a5e,#0f1020 60%) fixed;color:#f1f1ff;min-height:100vh}
-#app{max-width:720px;margin:auto;padding:14px}h1{text-align:center;margin:.4em 0;font-size:2em}h3{margin:.4em 0}
-.card{background:#1b1d3acc;border:1px solid #ffffff18;border-radius:16px;padding:14px;margin:10px 0}
-button{font:inherit;color:inherit;background:#7c5cff;border:0;border-radius:10px;padding:10px 14px;cursor:pointer}
-button:hover{filter:brightness(1.15)}button.ghost{background:#ffffff14}button.on{background:#ff4fa3}
-.chip{margin:3px;padding:7px 11px;background:#ffffff14;border-radius:99px;font-size:14px}
-input,select{font:inherit;padding:10px;border-radius:10px;border:1px solid #ffffff30;background:#0f1020;color:inherit;width:100%}
-.row{display:flex;gap:8px;margin:8px 0}.row>*{flex:1}.row>button{flex:0 0 auto}
-.big{font-size:56px;text-align:center}.c{text-align:center}.m,small{color:#9a9cc8}
-.cv{width:220px;max-width:70%;border-radius:12px;display:block;margin:auto}
-.cw{position:relative;width:240px;max-width:80%;margin:auto;overflow:hidden;border-radius:12px}.cw .cv{width:100%;max-width:100%}
-.tiles{display:grid;grid-template-columns:repeat(4,1fr);position:absolute;inset:0}.tiles b{background:#0f1020}
-.bar{height:6px;background:#ffffff18;border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#7c5cff,#ff4fa3)}
-.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}.opts button{background:#ffffff14;min-height:52px}
-.pl{display:block;margin:10px auto;padding:14px 26px;font-size:18px;background:#ff4fa3}
-.dots span{display:inline-block;width:26px;height:8px;border-radius:5px;background:#ffffff25;margin:2px}.dots .on{background:#2ecc8f}
-.pr{display:flex;justify-content:space-between;padding:6px 4px;border-bottom:1px solid #ffffff10}
-.code{font-size:38px;letter-spacing:8px;text-align:center;font-weight:800}
-.wd{font-size:28px;letter-spacing:5px;text-align:center;margin:10px 0;word-break:break-word}
-.kb button{margin:2px;padding:8px 10px;min-width:36px;background:#ffffff14}.kb button:disabled{opacity:.25}
-.sc{text-align:center;font-size:26px;letter-spacing:3px}
+:root{--bg:#0a0a12;--card:#14141fcc;--line:#ffffff14;--a:#8b5cf6;--b:#ec4899;--c:#22d3ee;--g:#34d399;--t:#f4f4fb;--m:#8e8fb0;--grad:linear-gradient(135deg,#8b5cf6,#ec4899)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font:16px/1.4 'Outfit',system-ui,sans-serif;background:var(--bg);color:var(--t);min-height:100vh;overflow-x:hidden}
+body:before,body:after{content:"";position:fixed;width:60vmax;height:60vmax;border-radius:50%;filter:blur(120px);opacity:.3;z-index:-1}
+body:before{background:var(--a);top:-30vmax;left:-20vmax}body:after{background:var(--b);bottom:-35vmax;right:-25vmax}
+#app{max-width:760px;margin:auto;padding:16px 14px 30px}
+.logo{text-align:center;font-size:44px;font-weight:800;margin:18px 0 2px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-1px}
+.sub{text-align:center;color:var(--m);margin:0 0 18px}.c{text-align:center}.m{color:var(--m)}
+h2{font-size:15px;text-transform:uppercase;letter-spacing:1.5px;color:var(--m);margin:22px 4px 10px;font-weight:600}h3{margin:.3em 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0;backdrop-filter:blur(12px)}
+button{font:inherit;color:inherit;border:0;cursor:pointer;transition:.15s}
+.btn{background:var(--grad);padding:14px 20px;border-radius:14px;font-weight:600;width:100%;box-shadow:0 8px 28px #8b5cf644}
+.btn:hover{transform:translateY(-2px)}.btn.ghost{background:#ffffff12;box-shadow:none}
+input{font:inherit;padding:14px;border-radius:14px;border:1px solid var(--line);background:#0c0c16;color:var(--t);width:100%;outline:0}
+input:focus{border-color:var(--a)}
+.row{display:flex;gap:10px;align-items:center}.row>input{flex:1}.row>.btn{width:auto}
+.avs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:12px}
+.avs button{font-size:26px;background:#ffffff0d;border-radius:14px;padding:8px}.avs .on{background:var(--grad);transform:scale(1.08)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tile{position:relative;text-align:left;background:#ffffff0a;border:1px solid var(--line);border-radius:16px;padding:14px;min-height:78px}
+.tile .e{font-size:26px;display:block}.tile b{display:block;font-weight:600}.tile small{color:var(--m);font-size:12.5px;line-height:1.2;display:block}
+.tile.on{background:linear-gradient(135deg,#8b5cf630,#ec489930);border-color:#8b5cf6}
+.tile.on:after{content:"✓";position:absolute;top:8px;right:10px;color:var(--g);font-weight:800}
+.ro .tile{pointer-events:none}
+.seg{display:flex;gap:8px}.seg button{flex:1;padding:12px;border-radius:12px;background:#ffffff0d;font-weight:600}.seg .on{background:var(--grad)}
+.pls{display:flex;gap:8px;flex-wrap:wrap}.pls span{background:#ffffff10;padding:8px 14px;border-radius:99px}
+.code{font-size:46px;font-weight:800;letter-spacing:10px;text-align:center;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stick{position:sticky;bottom:0;padding:26px 0 8px;background:linear-gradient(transparent,var(--bg) 45%);margin-top:10px}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:10px}.pill{background:#ffffff12;padding:6px 12px;border-radius:99px;font-size:14px}.mode{font-weight:800;font-size:18px}
+.ring{position:relative;width:54px;height:54px}.ring svg{transform:rotate(-90deg)}.ring circle{fill:none;stroke-width:5}
+.rb{stroke:#ffffff18}.rf{stroke:url(#gr);stroke:#ec4899;stroke-dasharray:138.2;stroke-dashoffset:0;stroke-linecap:round}.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:15px}
+.vin{width:150px;height:150px;margin:6px auto 14px;border-radius:50%;background:radial-gradient(circle,#ec4899 0 13%,#0a0a12 14% 16%,transparent 17%),repeating-radial-gradient(circle,#1d1d2c 0 3px,#0e0e16 4px 6px);box-shadow:0 10px 50px #8b5cf666;border:2px solid #ffffff18}
+.air .vin{animation:sp 2.2s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.play{display:block;margin:0 auto 14px;background:var(--b);padding:12px 26px;border-radius:99px;font-weight:600;box-shadow:0 6px 24px #ec489955}
+.dots{text-align:center;margin-bottom:8px}.dots span{display:inline-block;width:28px;height:7px;border-radius:5px;background:#ffffff22;margin:2px}.dots .on{background:var(--g)}
+.hint{color:var(--m);text-align:center;margin:0 0 10px}
+.cw{position:relative;width:250px;max-width:75%;margin:0 auto 12px;overflow:hidden;border-radius:16px;box-shadow:0 10px 40px #0008}.cw img{display:block;width:100%}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);position:absolute;inset:0}.tiles b{background:#0a0a12;transition:.4s}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{background:#ffffff0d;border:1px solid var(--line);border-radius:14px;padding:14px;min-height:56px;font-weight:600}.opt:hover{border-color:var(--a);background:#8b5cf622}
+.opt img{width:100%;border-radius:10px;display:block;margin-bottom:8px}.opt span{font-size:13px;display:block}
+.cv{width:200px;max-width:65%;display:block;margin:4px auto 10px;border-radius:16px;box-shadow:0 10px 40px #0008}
+.wd{font-size:28px;font-weight:800;letter-spacing:5px;text-align:center;margin:12px 0;word-break:break-word}
+.kb{text-align:center}.kb button{margin:3px;width:38px;height:42px;border-radius:10px;background:#ffffff12;font-weight:600}.kb button:disabled{opacity:.2}
+.res{font-size:60px;text-align:center}
+.pr{display:flex;align-items:center;gap:10px;padding:9px 6px;border-bottom:1px solid var(--line)}.pr:last-child{border:0}.pr i{width:26px;font-style:normal;color:var(--m)}.pr span{flex:1}.pr b{font-size:18px}.pr small{color:var(--g)}
+.sk{margin-top:10px}
 </style></head><body><div id="app"></div>
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
@@ -32,62 +59,66 @@ esc=s=>String(s??'').replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';'),
 norm=s=>String(s).toLocaleLowerCase('tr').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ı/g,'i').replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim(),
 scr=h=>$('#app').innerHTML=h,QT=45;
 
-/* ---- Türler (iTunes arama tohumları) ---- */
+/* ---- Türler: sadece çok bilinen sanatçılar ---- */
 const G={
-tpop:{n:'Türkçe Pop',e:'🇹🇷',c:'TR',s:['Tarkan','Sezen Aksu','Hadise','Gülşen','Mabel Matiz','Kenan Doğulu','Sertab Erener','Murat Boz','Simge','Hande Yener','Edis','Demet Akalın']},
-trock:{n:'Türkçe Rock',e:'🎸',c:'TR',s:['Mor ve Ötesi','Duman','maNga','Teoman','Barış Manço','Cem Karaca','Yüksek Sadakat','Pinhani','Haluk Levent','Athena','Gripin']},
-arab:{n:'Arabesk',e:'🥀',c:'TR',s:['Müslüm Gürses','Ferdi Tayfur','Orhan Gencebay','İbrahim Tatlıses','Küçük Ceylan','Bergen','Ahmet Kaya']},
-trap:{n:'Türkçe Rap',e:'🎤',c:'TR',s:['Ceza','Sagopa Kajmer','Ezhel','Norm Ender','Contra','Sansar Salvo','Hayki','Gazapizm']},
-halk:{n:'Halk & Sanat',e:'🪕',c:'TR',s:['Neşet Ertaş','Zeki Müren','Bülent Ersoy','Müzeyyen Senar','Selda Bağcan','Zülfü Livaneli','Hamiyet Yüceses']},
-nost:{n:'Nostalji Pop',e:'📼',c:'TR',s:['Ajda Pekkan','Mustafa Sandal','Yonca Evcimik','Burak Kut','Işın Karaca','Ebru Gündeş','Serdar Ortaç']},
-ypop:{n:'Yabancı Pop',e:'🌎',c:'US',s:['Taylor Swift','Ed Sheeran','Dua Lipa','The Weeknd','Ariana Grande','Billie Eilish','Bruno Mars','Adele','Harry Styles','Justin Bieber']},
-yrock:{n:'Yabancı Rock',e:'🤘',c:'US',s:['Queen','Nirvana','Metallica','AC/DC','Guns N\' Roses','Linkin Park','Coldplay','Red Hot Chili Peppers','Foo Fighters','Green Day','Imagine Dragons']},
-yrap:{n:'Yabancı Hip-Hop',e:'🎧',c:'US',s:['Eminem','Drake','Kendrick Lamar','50 Cent','Jay-Z','Travis Scott','Snoop Dogg','Post Malone']},
-dance:{n:'Dance / Elektronik',e:'🪩',c:'US',s:['Calvin Harris','David Guetta','Avicii','Daft Punk','Martin Garrix','Kygo','Swedish House Mafia']},
-r80:{n:'80\'ler & 90\'lar',e:'📻',c:'US',s:['Michael Jackson','Madonna','Prince','Whitney Houston','a-ha','Backstreet Boys','Spice Girls','Britney Spears']},
+tpop:{n:'Türkçe Pop',e:'🇹🇷',c:'TR',s:['Tarkan','Sezen Aksu','Hadise','Gülşen','Mabel Matiz','Kenan Doğulu','Sertab Erener','Murat Boz','Simge','Hande Yener','Edis','Demet Akalın','Mustafa Sandal','Ajda Pekkan']},
+trock:{n:'Türkçe Rock',e:'🎸',c:'TR',s:['Mor ve Ötesi','Duman','maNga','Teoman','Barış Manço','Cem Karaca','Yüksek Sadakat','Pinhani','Haluk Levent','Athena','Gripin','Şebnem Ferah']},
+arab:{n:'Arabesk',e:'🥀',c:'TR',s:['Müslüm Gürses','Ferdi Tayfur','Orhan Gencebay','İbrahim Tatlıses','Küçük Ceylan','Bergen','Ahmet Kaya','Hakan Altun']},
+trap:{n:'Türkçe Rap',e:'🎤',c:'TR',s:['Ceza','Sagopa Kajmer','Ezhel','Norm Ender','Contra','Sansar Salvo','Hayki','Gazapizm','Lvbel C5']},
+halk:{n:'Halk & Sanat',e:'🪕',c:'TR',s:['Neşet Ertaş','Zeki Müren','Bülent Ersoy','Müzeyyen Senar','Selda Bağcan','Zülfü Livaneli','Nükhet Duru']},
+nost:{n:'Nostalji Pop',e:'📼',c:'TR',s:['Ajda Pekkan','Yonca Evcimik','Burak Kut','Işın Karaca','Ebru Gündeş','Serdar Ortaç','Sibel Can','Mirkelam']},
+ypop:{n:'Yabancı Pop',e:'🌎',c:'US',s:['Taylor Swift','Ed Sheeran','Dua Lipa','The Weeknd','Ariana Grande','Billie Eilish','Bruno Mars','Adele','Harry Styles','Justin Bieber','Rihanna','Katy Perry']},
+yrock:{n:'Yabancı Rock',e:'🤘',c:'US',s:['Queen','Nirvana','Metallica','AC/DC','Guns N\' Roses','Linkin Park','Coldplay','Red Hot Chili Peppers','Foo Fighters','Green Day','Imagine Dragons','Pink Floyd']},
+yrap:{n:'Yabancı Hip-Hop',e:'🎧',c:'US',s:['Eminem','Drake','Kendrick Lamar','50 Cent','Jay-Z','Travis Scott','Snoop Dogg','Post Malone','Kanye West']},
+dance:{n:'Dance / Elektronik',e:'🪩',c:'US',s:['Calvin Harris','David Guetta','Avicii','Daft Punk','Martin Garrix','Kygo','Swedish House Mafia','Alan Walker']},
+r80:{n:'80\'ler & 90\'lar',e:'📻',c:'US',s:['Michael Jackson','Madonna','Prince','Whitney Houston','a-ha','Backstreet Boys','Spice Girls','Britney Spears','Bon Jovi']},
 latin:{n:'Latin',e:'💃',c:'US',s:['Shakira','Luis Fonsi','Bad Bunny','Enrique Iglesias','J Balvin','Ricky Martin']},
 kpop:{n:'K-Pop',e:'🇰🇷',c:'US',s:['BTS','BLACKPINK','TWICE','Stray Kids','NewJeans']}};
 
 /* ---- 15 oyun ---- */
 const M={
-heardle:{n:'Heardle',e:'🎧',k:'aud',st:[1,2,4,7,11,16],s:0},
-rast:{n:'Rastgele Kesit',e:'🎯',k:'aud',st:[2,4,7,11],s:'r'},
-son:{n:'Son Saniyeler',e:'⏳',k:'aud',st:[1,2,4,6],s:24},
-derin:{n:'Derin Ses',e:'🐻',k:'aud',st:[12,12,12],s:2,rate:.6,pf:1},
-sincap:{n:'Sincap Sesi',e:'🐿️',k:'aud',st:[8,8,8],s:2,rate:1.8,pf:1},
-blur:{n:'Bulanık Kapak',e:'🌫️',k:'vis'},
-tile:{n:'Kapak Puzzle',e:'🧩',k:'vis'},
-ad:{n:'Şarkı Adı (4 şık)',e:'🎼',k:'mc'},
-sanatci:{n:'Sanatçı Bul',e:'🎤',k:'mc'},
-album:{n:'Albüm Bul',e:'💿',k:'mc'},
-yil:{n:'Yıl Tahmini',e:'📅',k:'yil'},
-eski:{n:'Hangisi Eski?',e:'⏪',k:'eski'},
-ana:{n:'Anagram',e:'🔀',k:'ana'},
-adam:{n:'Adam Asmaca',e:'🪢',k:'adam'},
-karma:{n:'Karma (hepsi)',e:'🎲'}};
+heardle:{n:'Heardle',e:'🎧',d:'Süre uzadıkça ipucu artar',k:'aud',st:[1,2,4,7,11,16],s:0},
+rast:{n:'Rastgele Kesit',e:'🎯',d:'Şarkının rastgele bir yerinden',k:'aud',st:[2,4,7,11],s:'r'},
+son:{n:'Son Saniyeler',e:'⏳',d:'Sadece şarkının sonu çalar',k:'aud',st:[1,2,4,6],s:24},
+derin:{n:'Derin Ses',e:'🐻',d:'Ses kalın ve yavaş',k:'aud',st:[12,12,12],s:2,rate:.6,pf:1},
+sincap:{n:'Sincap Sesi',e:'🐿️',d:'Ses ince ve hızlı',k:'aud',st:[8,8,8],s:2,rate:1.8,pf:1},
+blur:{n:'Bulanık Kapak',e:'🌫️',d:'Bulanık kapaktan albümü bul',k:'vis'},
+tile:{n:'Kapak Puzzle',e:'🧩',d:'Kapak açıldıkça albümü bul',k:'vis'},
+ad:{n:'Şarkı Adı',e:'🎼',d:'4 şıktan şarkıyı seç',k:'mc'},
+sanatci:{n:'Sanatçı Bul',e:'🎤',d:'Şarkıyı kim söylüyor?',k:'mc'},
+album:{n:'Albüm Bul',e:'💿',d:'Şarkı çalar, albüm kapağını seç',k:'mc'},
+yil:{n:'Yıl Tahmini',e:'📅',d:'Hangi yıl çıktı? Yakınsan puan',k:'yil'},
+eski:{n:'Hangisi Eski?',e:'⏪',d:'İki şarkıdan eski olanı bul',k:'eski'},
+ana:{n:'Anagram',e:'🔀',d:'Karışık harfli şarkı adı',k:'ana'},
+adam:{n:'Adam Asmaca',e:'🪢',d:'Harf harf şarkıyı bul',k:'adam'},
+karma:{n:'Karma',e:'🎲',d:'Tüm oyunlar karışık gelir'}};
 
-/* ---- Veri: iTunes Search API ---- */
-const cache={};
+/* ---- Veri: iTunes (sonuçlar popülerlik sırasıyla gelir, ilk 7'yi alıyoruz) ---- */
+const cache={},BAD=/live|canlı|remix|karaoke|instrumental|acoustic|version|edit|demo|skit|interlude|intro|cover|tribute|piano|lullaby|slowed|sped|reverb|orchestra|\bmix\b/i,
+clean=s=>(s||'').replace(/\s*[\(\[].*?[\)\]]/g,'').replace(/\s+-\s+.*$/,'').trim();
 function it(term,c){const k=term+c;if(cache[k])return Promise.resolve(cache[k]);
-const u=`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&media=music&entity=song&attribute=artistTerm&limit=25&country=${c}`;
+const u=`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&media=music&entity=song&attribute=artistTerm&limit=20&country=${c}`,w=norm(term).split(' ')[0];
 return fetch(u).then(r=>r.json()).catch(()=>new Promise((ok,no)=>{const f='cb'+rnd(1e9),s=document.createElement('script');window[f]=d=>{ok(d);s.remove()};s.onerror=no;s.src=u+'&callback='+f;document.head.append(s)}))
-.then(d=>cache[k]=d.results.filter(x=>x.previewUrl&&x.trackName).map(x=>({t:x.trackName.replace(/\s*[\(\[].*?[\)\]]/g,'').replace(/\s+-\s+.*$/,'').trim(),a:x.artistName,p:x.previewUrl,i:(x.artworkUrl100||'').replace('100x100','400x400'),y:+(x.releaseDate||'0').slice(0,4),al:(x.collectionName||'').replace(/\s*[\(\[].*?[\)\]]/g,'').replace(/\s+-\s+(Single|EP)$/i,'')})))}
-async function build(gs){const n=Math.min(5,Math.max(2,Math.ceil(10/gs.length)));let sd=[];gs.forEach(k=>shuf(G[k].s).slice(0,n).forEach(s=>sd.push([s,G[k].c])));
-const seen=new Set(),out=[];(await Promise.all(shuf(sd).slice(0,12).map(([s,c])=>it(s,c).catch(()=>[])))).flat().forEach(t=>{const k=norm(t.t)+norm(t.a);if(t.t&&t.y&&!seen.has(k)){seen.add(k);out.push(t)}});return out}
-function mk(pool,c){const T=shuf(pool),ids=Object.keys(M).slice(0,-1),qs=[];
-for(let k=0;k<c.n;k++){let m=pick(c.m);if(m=='karma')m=pick(ids);const tr=T[k];
-if(m=='album'&&!tr.al||(m=='ana'||m=='adam')&&!/[a-z]{3}/.test(norm(tr.t)))m='ad';
+.then(d=>cache[k]=d.results.filter(x=>x.previewUrl&&x.trackName&&norm(x.artistName).includes(w)&&!BAD.test(x.trackName+' '+(x.collectionName||''))).slice(0,7)
+.map(x=>({t:clean(x.trackName),a:x.artistName,p:x.previewUrl,i:(x.artworkUrl100||'').replace('100x100','500x500'),y:+(x.releaseDate||'0').slice(0,4),al:clean(x.collectionName),ia:!/-\s*(single|ep)$/i.test(x.collectionName||'')&&norm(clean(x.collectionName))!=norm(clean(x.trackName))})))}
+async function build(gs){const n=Math.min(8,Math.max(2,Math.ceil(12/gs.length)));let sd=[];gs.forEach(k=>shuf(G[k].s).slice(0,n).forEach(s=>sd.push([s,G[k].c])));
+const seen=new Set(),out=[];(await Promise.all(shuf(sd).slice(0,12).map(([s,c])=>it(s,c).catch(()=>[])))).flat().forEach(t=>{const k=norm(t.t);if(t.t&&t.y&&!seen.has(k)){seen.add(k);out.push(t)}});return out}
+function mk(pool,c){const T=shuf(pool),ids=Object.keys(M).slice(0,-1),qs=[],used=new Set();
+for(let k=0;k<c.n;k++){let m=pick(c.m);if(m=='karma')m=pick(ids);const cv=['blur','tile','album'].includes(m);
+const tr=T.find(x=>!used.has(x)&&(!cv||x.ia))||T.find(x=>!used.has(x));used.add(tr);
+if(cv&&!tr.ia||(m=='ana'||m=='adam')&&!/[a-z]{3}/.test(norm(tr.t)))m='ad';
 const q={m,tr,rs:rnd(16),sw:rnd(2)};
 const od=f=>{const o=[tr[f]];for(const x of shuf(T))if(x[f]&&!o.includes(x[f])){o.push(x[f]);if(o.length>3)break}return shuf(o)};
-if(m=='ad')q.o=od('t');if(m=='sanatci')q.o=od('a');if(m=='album')q.o=od('al');
-if(m=='eski')q.t2=T.find(x=>Math.abs(x.y-tr.y)>1)||T[c.n];
+if(m=='ad')q.o=od('t');if(m=='sanatci')q.o=od('a');
+if(m=='album'){const o=[{k:tr.al,i:tr.i}];for(const x of shuf(T))if(x.ia&&!o.some(y=>norm(y.k)==norm(x.al))){o.push({k:x.al,i:x.i});if(o.length>3)break}q.o=shuf(o)}
+if(m=='eski')q.t2=T.find(x=>x!=tr&&Math.abs(x.y-tr.y)>1)||T.find(x=>x!=tr);
 if(m=='ana')q.sc=tr.t.toLocaleUpperCase('tr').split(' ').map(w=>{let s=w;for(let i=0;i<6&&s==w&&w.length>1;i++)s=shuf(w.split('')).join('');return s}).join(' ');
 qs.push(q)}return qs}
 
 /* ---- Ses ---- */
-const A=new Audio();let au,ta;
-const SIL='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
-addEventListener('pointerdown',()=>{if(!A.src){A.src=SIL;A.play().catch(()=>{})}},{once:true});
+const A=new Audio();let ta;
+addEventListener('pointerdown',()=>{if(!A.src){A.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';A.play().catch(()=>{})}},{once:true});
+A.addEventListener('playing',()=>document.body.classList.add('air'));['pause','ended'].forEach(e=>A.addEventListener(e,()=>document.body.classList.remove('air')));
 const stopAu=()=>{clearTimeout(ta);A.pause()};
 function play(u,s=0,d=0,r=1,pf=0){clearTimeout(ta);A.pause();A.onloadedmetadata=A.onplaying=null;
 A.src=u;A.preservesPitch=A.mozPreservesPitch=A.webkitPreservesPitch=!pf;A.playbackRate=r;
@@ -96,7 +127,7 @@ A.onplaying=()=>{clearTimeout(ta);if(d)ta=setTimeout(()=>A.pause(),d*1000)};
 const p=A.play();if(p)p.catch(()=>{})}
 
 /* ---- Ağ (PeerJS, host-merkezli) ---- */
-let me={n:localStorage.n||'',av:localStorage.av||'😎'},peer,hc,host=0,code='',P={},cfg={g:['tpop','ypop','trock'],m:['karma'],n:10},qs=[],titles=[],L={},tmr,rv,inGame=0,cur=0;const conns={};
+let me={n:localStorage.n||'',av:localStorage.av||'😎'},peer,hc,host=0,code='',P={},cfg={g:['tpop','ypop','trock'],m:['karma'],n:10},qs=[],titles=[],albums=[],L={},tmr,tint,rv,inGame=0,cur=0;const conns={};
 const bc=m=>{Object.values(conns).forEach(c=>c.open&&c.send(m));handle(m)};
 const ans=p=>host?hrecv({t:'ans',pts:p},'host'):hc.send({t:'ans',pts:p});
 const chk=()=>{if(!rv&&Object.values(P).every(p=>p.d))reveal()};
@@ -110,39 +141,40 @@ if(d.t=='join'){if(inGame){conns[id].send({t:'busy'});return}P[id]={n:d.n,av:d.a
 if(d.t=='ans'&&inGame&&P[id]&&!P[id].d){const p=P[id];p.d=1;p.s+=d.pts;p.l=d.pts;chk()}}
 async function start(){inGame=1;bc({t:'load'});const pool=await build(cfg.g);
 if(pool.length<cfg.n+4){inGame=0;alert('Yeterli şarkı bulunamadı (internet / iTunes istek sınırı olabilir). Biraz sonra tekrar dene.');return bc({t:'lobby',P,cfg})}
-Object.values(P).forEach(p=>p.s=0);bc({t:'start',qs:mk(pool,cfg),titles:pool.map(x=>x.t+' - '+x.a)});nxt(0)}
+Object.values(P).forEach(p=>p.s=0);const al=[...new Map(pool.filter(x=>x.ia).map(x=>[norm(x.al),x.al+' - '+x.a])).values()];
+bc({t:'start',qs:mk(pool,cfg),titles:pool.map(x=>x.t+' - '+x.a),albums:al});nxt(0)}
 function nxt(i){if(i>=qs.length){inGame=0;return bc({t:'end',P})}cur=i;rv=0;Object.values(P).forEach(p=>{p.d=0;p.l=0});bc({t:'q',i});clearTimeout(tmr);tmr=setTimeout(reveal,QT*1000+800)}
-function reveal(){if(rv)return;rv=1;clearTimeout(tmr);bc({t:'rev',i:cur,P});tmr=setTimeout(()=>nxt(cur+1),7000)}
+function reveal(){if(rv)return;rv=1;clearTimeout(tmr);bc({t:'rev',i:cur,P});tmr=setTimeout(()=>nxt(cur+1),8000)}
 function handle(m){
 if(m.t=='lobby'){P=m.P;cfg=m.cfg;lobby()}
-else if(m.t=='load')scr('<div class="card c"><div class=big>⏳</div><h3>Şarkılar hazırlanıyor…</h3></div>');
-else if(m.t=='start'){qs=m.qs;titles=m.titles}
+else if(m.t=='load')scr('<div class="card c" style="margin-top:30vh"><div style="font-size:54px">🎶</div><h3>Hit şarkılar hazırlanıyor…</h3><p class=m>Birkaç saniye sürebilir</p></div>');
+else if(m.t=='start'){qs=m.qs;titles=m.titles;albums=m.albums}
 else if(m.t=='q')rq(m.i);else if(m.t=='rev')rrev(m);else if(m.t=='end')rend();
 else if(m.t=='busy'){alert('Oyun başlamış, bitmesini bekle.');home()}}
 function join(c){if(c.length!=4)return alert('4 harfli oda kodunu yaz');if(typeof Peer=='undefined')return alert('PeerJS yüklenemedi');
-scr('<div class="card c"><div class=big>🔌</div><h3>Odaya bağlanılıyor…</h3></div>');
+scr('<div class="card c" style="margin-top:30vh"><div style="font-size:54px">🔌</div><h3>Odaya bağlanılıyor…</h3></div>');
 peer=new Peer();const bad=()=>{alert('Oda bulunamadı veya bağlantı kurulamadı');home()},to=setTimeout(bad,10000);
 peer.on('error',()=>{clearTimeout(to);bad()});
 peer.on('open',()=>{hc=peer.connect('nq-'+c,{reliable:true});hc.on('open',()=>{clearTimeout(to);host=0;hc.send({t:'join',n:me.n,av:me.av})});hc.on('data',handle);hc.on('close',()=>{alert('Bağlantı koptu');home()})})}
 
 /* ---- Ekranlar ---- */
-const rank=d=>Object.values(P).sort((a,b)=>b.s-a.s).map(p=>`<div class=pr><span>${p.av} ${esc(p.n)}</span><b>${p.s}${d&&p.l?` <small>+${p.l}</small>`:''}</b></div>`).join('');
-function home(){stopAu();clearTimeout(tmr);if(peer){peer.destroy();peer=null}Object.keys(conns).forEach(k=>delete conns[k]);host=0;inGame=0;code='';
+const rank=d=>Object.values(P).sort((a,b)=>b.s-a.s).map((p,i)=>`<div class=pr><i>${['🥇','🥈','🥉'][i]||i+1}</i><span>${p.av} ${esc(p.n)}</span>${d&&p.l?`<small>+${p.l}</small>`:''}<b>${p.s}</b></div>`).join('');
+function home(){stopAu();clearTimeout(tmr);clearInterval(tint);if(peer){peer.destroy();peer=null}Object.keys(conns).forEach(k=>delete conns[k]);host=0;inGame=0;code='';
 const av=['😎','🤩','🦊','🐼','🐸','🦄','🐯','👻','🤖','🎸','🥁','🎧'];
-scr(`<h1>🎵 Nota Arena</h1><p class="c m">Hesap yok, kayıt yok. Adını yaz ve çal!</p>
-<div class=card><input id=nm maxlength=14 placeholder="Misafir adın" value="${esc(me.n)}"><div class=c style="margin-top:8px">${av.map(a=>`<button class="chip ${a==me.av?'on':''}" data-a="${a}">${a}</button>`).join('')}</div></div>
-<div class=card><button id=solo style="width:100%">🎮 Tek Başıma Oyna</button><br><br><button id=mkr style="width:100%">🏠 Oda Kur (arkadaşlarla)</button><br><br>
-<div class=row><input id=cd maxlength=4 placeholder="ODA KODU" value="${esc(location.hash.slice(1).toUpperCase())}" style="text-transform:uppercase"><button id=jn>Katıl</button></div></div>`);
+scr(`<div class=logo>🎵 Nota Arena</div><p class=sub>Hesap yok, kayıt yok. Adını yaz, şarkıları bil!</p>
+<div class=card><input id=nm maxlength=14 placeholder="Takma adın" value="${esc(me.n)}"><div class=avs>${av.map(a=>`<button class="${a==me.av?'on':''}" data-a="${a}">${a}</button>`).join('')}</div></div>
+<div class=card><button class=btn id=solo>🎮 Tek Başıma Oyna</button><div style="height:10px"></div><button class="btn ghost" id=mkr>🏠 Oda Kur · Arkadaşlarınla Oyna</button>
+<h2 style="margin:20px 0 8px">Odaya katıl</h2><div class=row><input id=cd maxlength=4 placeholder="ODA KODU" value="${esc(location.hash.slice(1).toUpperCase())}" style="text-transform:uppercase;letter-spacing:6px;text-align:center;font-weight:800"><button class=btn id=jn>Katıl</button></div></div>`);
 $$('[data-a]').forEach(b=>b.onclick=()=>{me.av=b.dataset.a;$$('[data-a]').forEach(x=>x.classList.toggle('on',x==b))});
 const sv=()=>{me.n=$('#nm').value.trim()||'Misafir'+(100+rnd(900));try{localStorage.n=me.n;localStorage.av=me.av}catch(e){}};
 $('#solo').onclick=()=>{sv();mkHost(0)};$('#mkr').onclick=()=>{sv();mkHost(1)};$('#jn').onclick=()=>{sv();join($('#cd').value.trim().toUpperCase())}}
-function lobby(){const ed=host;
-scr(`<h1>🎵 Lobi</h1>`+(code?`<div class=card><div class="c m">Oda kodu</div><div class=code>${code}</div><button class=ghost id=cp style="width:100%">🔗 Davet linkini kopyala</button></div>`:'')+
-`<div class=card><h3>Oyuncular (${Object.keys(P).length})</h3>${rank(0)}</div>
-<div class=card><h3>Müzik türleri</h3>${Object.entries(G).map(([k,g])=>`<button class="chip ${cfg.g.includes(k)?'on':''}" data-g="${k}">${g.e} ${g.n}</button>`).join('')}</div>
-<div class=card><h3>Oyunlar</h3>${Object.entries(M).map(([k,g])=>`<button class="chip ${cfg.m.includes(k)?'on':''}" data-m="${k}">${g.e} ${g.n}</button>`).join('')}
-<h3>Tur sayısı</h3>${[5,10,15,20].map(n=>`<button class="chip ${cfg.n==n?'on':''}" data-n="${n}">${n}</button>`).join('')}</div>`+
-(ed?'<button id=go style="width:100%;font-size:18px">▶ Oyunu Başlat</button>':'<p class="c m">Ayarları host seçer, oyun otomatik başlar…</p>')+'<br><br><button class=ghost id=hm style="width:100%">Çık</button>');
+function lobby(){const ed=host,y=scrollY;
+scr(`<div class=logo style="font-size:30px;margin:6px">🎵 Lobi</div>`+(code?`<div class=card><div class="c m">ODA KODU</div><div class=code>${code}</div><button class="btn ghost" id=cp>🔗 Davet linkini kopyala</button></div>`:'')+
+`<h2>Oyuncular · ${Object.keys(P).length}</h2><div class=pls>${Object.values(P).map(p=>`<span>${p.av} ${esc(p.n)}</span>`).join('')}</div>
+<div class="${ed?'':'ro'}"><h2>Müzik türleri</h2><div class=grid>${Object.entries(G).map(([k,g])=>`<button class="tile ${cfg.g.includes(k)?'on':''}" data-g="${k}"><span class=e>${g.e}</span><b>${g.n}</b></button>`).join('')}</div>
+<h2>Oyunlar</h2><div class=grid>${Object.entries(M).map(([k,g])=>`<button class="tile ${cfg.m.includes(k)?'on':''}" data-m="${k}"><span class=e>${g.e}</span><b>${g.n}</b><small>${g.d}</small></button>`).join('')}</div>
+<h2>Tur sayısı</h2><div class=seg>${[5,10,15,20].map(n=>`<button class="${cfg.n==n?'on':''}" data-n="${n}">${n}</button>`).join('')}</div></div>
+<div class=stick>${ed?'<button class=btn id=go style="font-size:18px">▶ Oyunu Başlat</button>':'<p class="c m">Ayarları oda sahibi seçer, oyun otomatik başlar…</p>'}<div style="height:8px"></div><button class="btn ghost" id=hm style="padding:10px">Çık</button></div>`);scrollTo(0,y);
 if(code)$('#cp').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(location.href.split('#')[0]+'#'+code);$('#cp').textContent='✅ Kopyalandı'};
 $('#hm').onclick=home;if(!ed)return;
 const sel=(a,v)=>{const i=a.indexOf(v);if(i<0)a.push(v);else if(a.length>1)a.splice(i,1);bc({t:'lobby',P,cfg})};
@@ -150,47 +182,48 @@ $$('[data-g]').forEach(b=>b.onclick=()=>sel(cfg.g,b.dataset.g));$$('[data-m]').f
 $$('[data-n]').forEach(b=>b.onclick=()=>{cfg.n=+b.dataset.n;bc({t:'lobby',P,cfg})});$('#go').onclick=start}
 
 /* ---- Oyun ---- */
-const gin=dl=>`<div class=row><input id=gi ${dl===0?'':'list=dl'} placeholder="Şarkı adı…" autocomplete=off><button id=gb>Tahmin</button></div>`+(dl===0?'':`<datalist id=dl>${titles.map(x=>`<option value="${esc(x)}">`).join('')}</datalist>`);
+const gin=(l,ph)=>`<div class=row><input id=gi ${l?'list=dl':''} placeholder="${ph}" autocomplete=off><button class=btn id=gb>Tahmin</button></div>`+(l?`<datalist id=dl>${l.map(x=>`<option value="${esc(x)}">`).join('')}</datalist>`:'');
 const gw=cb=>{const f=()=>{const v=$('#gi').value.trim();if(v){$('#gi').value='';cb(v)}};$('#gb').onclick=f;$('#gi').onkeydown=e=>e.key=='Enter'&&f()};
-const ok=v=>norm(v.split(' - ')[0])==norm(L.q.tr.t);
+const ok=v=>norm(v.split(' - ')[0])==norm(L.q.tr.t),okA=v=>norm(v.split(' - ')[0])==norm(L.q.tr.al);
 const pts=()=>Math.max(30,Math.round(100+100*Math.max(0,1-(Date.now()-L.t0)/1e3/QT)-20*L.w));
-function fin(p,msg){if(L.d)return;L.d=1;stopAu();$('#st').innerHTML=`<div class=big>${p?'✅':'❌'}</div><h3 class=c>${esc(msg||'')}</h3><p class=c>+${p} puan · diğerleri bekleniyor…</p>`;ans(p)}
-function rq(i){const q=qs[i],m=M[q.m],t=q.tr;L={i,q,m,st:0,w:0,t0:Date.now(),d:0,g:new Set()};
-scr(`<div class=card><div class=row style="justify-content:space-between;margin:0"><b>Tur ${i+1}/${qs.length}</b><b>${m.e} ${m.n}</b></div></div><div class=bar><i id=bar></i></div><div class=card id=st></div><div class=card id=sb>${rank(0)}</div>`);
-setTimeout(()=>{const b=$('#bar');if(b){b.style.transition=`width ${QT}s linear`;b.style.width='0'}},60);
+function fin(p,msg){if(L.d)return;L.d=1;stopAu();$('#st').innerHTML=`<div class=res>${p?'✅':'❌'}</div><h3 class=c>${esc(msg||'')}</h3><p class="c m">+${p} puan · diğerleri bekleniyor…</p>`;ans(p)}
+function rq(i){const q=qs[i],m=M[q.m],t=q.tr;L={i,q,m,st:0,w:0,t0:Date.now(),d:0,g:new Set()};clearInterval(tint);
+scr(`<div class=hd><span class=pill>Tur ${i+1}/${qs.length}</span><span class=mode>${m.e} ${m.n}</span><div class=ring><svg viewBox="0 0 54 54"><circle cx=27 cy=27 r=22 class=rb /><circle id=rg cx=27 cy=27 r=22 class=rf /></svg><b id=tn>${QT}</b></div></div><div class=card id=st></div><h2>Skor</h2><div class=card id=sb>${rank(0)}</div>`);
+setTimeout(()=>{const r=$('#rg');if(r){r.style.transition=`stroke-dashoffset ${QT}s linear`;r.style.strokeDashoffset=138.2}},60);
+tint=setInterval(()=>{const n=$('#tn');if(n)n.textContent=Math.max(0,QT-Math.round((Date.now()-L.t0)/1000))},500);
 const S=h=>$('#st').innerHTML=h;
 if(m.k=='aud'){const go=()=>play(t.p,m.s=='r'?q.rs:m.s,m.st[L.st],m.rate||1,m.pf);
-S(`<div class=c id=ds></div><button class=pl id=pl></button>${gin()}<button class=ghost id=sk style="width:100%">⏭ Pas (sonraki ipucu)</button>`);
-const u=()=>{$('#ds').className='dots';$('#ds').innerHTML=m.st.map((_,j)=>`<span class="${j<=L.st?'on':''}"></span>`).join('');$('#pl').textContent=`▶ Çal (${m.st[L.st]} sn)`};
+S(`<div class=vin></div><button class=play id=pl></button><div class=dots id=ds></div><p class=hint>Şarkının adını yaz</p>${gin(titles,'Şarkı adı…')}<button class="btn ghost sk" id=sk>⏭ Pas · sonraki ipucu</button>`);
+const u=()=>{$('#ds').innerHTML=m.st.map((_,j)=>`<span class="${j<=L.st?'on':''}"></span>`).join('');$('#pl').textContent=`▶ Çal · ${m.st[L.st]} sn`};
 const wr=()=>{L.w++;if(L.st<m.st.length-1){L.st++;u();go()}else fin(0,'Hakların bitti')};
 u();go();$('#pl').onclick=go;$('#sk').onclick=wr;gw(v=>ok(v)?fin(pts(),'Doğru!'):wr())}
 else if(m.k=='vis'){const bl=[30,22,15,9,5,2],tl=shuf([...Array(16).keys()]),bq=q.m=='blur';
-S(`<div class=cw><img class=cv id=im src="${esc(t.i)}">${bq?'':'<div class=tiles>'+'<b></b>'.repeat(16)+'</div>'}</div><p class="c m">Kapaktan şarkıyı bul</p>${gin()}<button class=ghost id=sk style="width:100%">⏭ Pas (ipucu aç)</button>`);
+S(`<div class=cw><img id=im src="${esc(t.i)}">${bq?'':'<div class=tiles>'+'<b></b>'.repeat(16)+'</div>'}</div><p class=hint>Bu hangi albümün kapağı?</p>${gin(albums,'Albüm adı…')}<button class="btn ghost sk" id=sk>⏭ Pas · ipucu aç</button>`);
 const rv_=()=>{if(bq)$('#im').style.filter=`blur(${bl[Math.min(L.w,5)]}px)`;else $$('.tiles b').forEach((b,j)=>{if(tl.indexOf(j)<2+3*L.w)b.style.opacity=0})};
 const wr=()=>{L.w++;rv_();if(bq?L.w>5:2+3*L.w>=16)fin(0,'Bulamadın')};
-rv_();$('#sk').onclick=wr;gw(v=>ok(v)?fin(pts(),'Doğru!'):wr())}
-else if(m.k=='mc'){play(t.p);const lab={ad:'Bu şarkının adı ne?',sanatci:'Bu şarkıyı kim söylüyor?',album:'Hangi albümden?'}[q.m],an={ad:t.t,sanatci:t.a,album:t.al}[q.m];
-S(`<p class=c>${lab}</p><button class=pl id=pl>▶ Tekrar çal</button><div class=opts>${q.o.map(o=>`<button data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div>`);
-$('#pl').onclick=()=>play(t.p);$$('.opts button').forEach(b=>b.onclick=()=>b.dataset.o==an?fin(pts(),'Doğru!'):fin(0,'Yanlış'))}
-else if(m.k=='yil'){play(t.p);S(`<p class=c>Bu şarkı hangi yıl çıktı?</p><button class=pl id=pl>▶ Tekrar çal</button><div class=big id=yv>2000</div><input type=range id=yr min=1960 max=2026 value=2000 style="padding:0"><br><br><button id=gb style="width:100%">Onayla</button>`);
+rv_();$('#sk').onclick=wr;gw(v=>okA(v)?fin(pts(),'Doğru!'):wr())}
+else if(m.k=='mc'){play(t.p);const al=q.m=='album',lab={ad:'Bu şarkının adı ne?',sanatci:'Bu şarkıyı kim söylüyor?',album:'Bu şarkı hangi albümden?'}[q.m],an={ad:t.t,sanatci:t.a,album:t.al}[q.m];
+S(`<div class=vin></div><button class=play id=pl>▶ Tekrar çal</button><p class=hint>${lab}</p><div class=opts>${q.o.map(o=>al?`<button class=opt data-o="${esc(o.k)}"><img src="${esc(o.i)}"><span>${esc(o.k)}</span></button>`:`<button class=opt data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div>`);
+$('#pl').onclick=()=>play(t.p);$$('.opt').forEach(b=>b.onclick=()=>b.dataset.o==an?fin(pts(),'Doğru!'):fin(0,'Yanlış'))}
+else if(m.k=='yil'){play(t.p);S(`<div class=vin></div><button class=play id=pl>▶ Tekrar çal</button><p class=hint>Bu şarkı hangi yıl çıktı?</p><div class=logo id=yv style="margin:0">2000</div><input type=range id=yr min=1960 max=2026 value=2000 style="padding:0;margin:14px 0"><button class=btn id=gb>Onayla</button>`);
 $('#pl').onclick=()=>play(t.p);$('#yr').oninput=e=>$('#yv').textContent=e.target.value;
 $('#gb').onclick=()=>{const d=Math.abs($('#yr').value-t.y);fin(Math.round(200*Math.max(0,1-d/12)),d?d+' yıl fark':'Tam isabet!')}}
-else if(m.k=='eski'){const A=q.sw?q.t2:t,B=q.sw?t:q.t2,X=[A,B];
-S(`<p class=c>Hangi şarkı daha eski çıktı?</p><div class=opts>${X.map((x,j)=>`<div class=c><button class=ghost data-p=${j}>▶ ${'AB'[j]} şarkısı</button><br><br><button data-c=${j}>${'AB'[j]} daha eski</button></div>`).join('')}</div>`);
+else if(m.k=='eski'){const X=q.sw?[q.t2,t]:[t,q.t2];
+S(`<p class=hint>Hangi şarkı daha eski çıktı?</p><div class=opts>${X.map((x,j)=>`<div class=c><div class=vin style="width:90px;height:90px"></div><button class="btn ghost" data-p=${j}>▶ ${'AB'[j]} şarkısı</button><div style="height:8px"></div><button class=btn data-c=${j}>${'AB'[j]} daha eski</button></div>`).join('')}</div>`);
 $$('[data-p]').forEach(b=>b.onclick=()=>play(X[b.dataset.p].p,0,15));
 $$('[data-c]').forEach(b=>b.onclick=()=>{const j=+b.dataset.c;X[j].y<=X[1-j].y?fin(pts(),'Doğru!'):fin(0,'Yanlış')})}
-else if(m.k=='ana'){S(`<p class=c>Harfleri karışık şarkıyı bul · Sanatçı: <b>${esc(t.a)}</b></p><div class=wd>${esc(q.sc)}</div><button class=pl id=pl>▶ Çal</button>${gin(0)}`);
+else if(m.k=='ana'){S(`<p class=hint>Sanatçı: <b>${esc(t.a)}</b></p><div class=wd>${esc(q.sc)}</div><button class=play id=pl>▶ Çal</button>${gin(0,'Şarkı adını yaz…')}`);
 $('#pl').onclick=()=>play(t.p);gw(v=>{if(ok(v))fin(pts(),'Doğru!');else{L.w++;if(L.w>=3)fin(0,'Hakların bitti');else $('#gi').placeholder='Yanlış! Kalan hak: '+(3-L.w)}})}
 else if(m.k=='adam'){play(t.p);const W=t.t.toLocaleUpperCase('tr').normalize('NFD').replace(/[\u0300-\u036f]/g,''),
 open=()=>[...W].some(x=>/[A-Z]/.test(x)&&!L.g.has(x)),
-draw=()=>{S(`<div class=sc>${'❤️'.repeat(6-L.w)}${'🖤'.repeat(L.w)}</div><div class=wd>${esc([...W].map(c=>/[A-Z]/.test(c)&&!L.g.has(c)?'_':c).join(' '))}</div><button class=pl id=pl>▶ Çal</button><div class="kb c">${[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].map(c=>`<button ${L.g.has(c)?'disabled':''}>${c}</button>`).join('')}</div>`);
+draw=()=>{S(`<div class=c style="font-size:24px">${'❤️'.repeat(6-L.w)}${'🖤'.repeat(L.w)}</div><div class=wd>${esc([...W].map(c=>/[A-Z]/.test(c)&&!L.g.has(c)?'_':c).join(' '))}</div><button class=play id=pl>▶ Çal</button><div class=kb>${[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].map(c=>`<button ${L.g.has(c)?'disabled':''}>${c}</button>`).join('')}</div>`);
 $('#pl').onclick=()=>play(t.p);$$('.kb button').forEach(b=>b.onclick=()=>{if(L.d)return;const c=b.textContent;L.g.add(c);if(!W.includes(c))L.w++;
 if(!open())return fin(pts(),'Doğru!');if(L.w>=6)return fin(0,'Asıldın!');draw()})};draw()}}
-function rrev(m){stopAu();L.d=1;P=m.P;const q=qs[m.i],t=q.tr,b=$('#bar');if(b)b.style.transition='none';
-$('#st').innerHTML=`<img class=cv src="${esc(t.i)}"><h3 class=c>${esc(t.t)}</h3><p class=c>${esc(t.a)} · ${t.y}${t.al?' · '+esc(t.al):''}</p>`+(q.t2?`<p class="c m">Diğer şarkı: ${esc(q.t2.t)} – ${esc(q.t2.a)} (${q.t2.y})</p>`:'')+(host?'<button id=nx style="width:100%">⏭ Sonraki</button>':'');
-$('#sb').innerHTML=rank(1);if(host)$('#nx').onclick=()=>{clearTimeout(tmr);nxt(cur+1)};play(t.p,0,7)}
+function rrev(m){stopAu();clearInterval(tint);L.d=1;P=m.P;const q=qs[m.i],t=q.tr,r=$('#rg');if(r)r.style.transition='none';
+$('#st').innerHTML=`<img class=cv src="${esc(t.i)}"><h3 class=c>${esc(t.t)}</h3><p class="c m" style="margin:0 0 12px">${esc(t.a)} · ${t.y}${t.al?'<br>💿 '+esc(t.al):''}</p>`+(q.t2?`<p class="c m">Diğer şarkı: ${esc(q.t2.t)} – ${esc(q.t2.a)} (${q.t2.y})</p>`:'')+(host?'<button class="btn ghost" id=nx>⏭ Sonraki tur</button>':'');
+$('#sb').innerHTML=rank(1);if(host)$('#nx').onclick=()=>{clearTimeout(tmr);nxt(cur+1)};play(t.p,0,8)}
 function rend(){stopAu();const r=Object.values(P).sort((a,b)=>b.s-a.s);
-scr(`<h1>🏆 Sonuçlar</h1><div class=card>${r.map((p,i)=>`<div class=pr><span>${['🥇','🥈','🥉'][i]||(i+1)+'.'} ${p.av} ${esc(p.n)}</span><b>${p.s}</b></div>`).join('')}</div>`+(host?'<button id=bk style="width:100%">↩ Lobiye dön</button>':'<p class="c m">Host lobiye dönünce devam edebilirsiniz…</p>')+'<br><br><button class=ghost id=hm style="width:100%">Ana sayfa</button>');
+scr(`<div class=logo>🏆 Sonuçlar</div><p class=sub>${esc(r[0].av)} ${esc(r[0].n)} kazandı!</p><div class=card>${rank(0)}</div>`+(host?'<button class=btn id=bk>↩ Lobiye dön</button>':'<p class="c m">Oda sahibi lobiye dönünce devam edebilirsiniz…</p>')+'<div style="height:10px"></div><button class="btn ghost" id=hm>Ana sayfa</button>');
 if(host)$('#bk').onclick=()=>bc({t:'lobby',P,cfg});$('#hm').onclick=home}
 home();
 </script></body></html>
