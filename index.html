@@ -28,7 +28,7 @@ input{font:inherit;padding:15px;border-radius:16px;border:1px solid var(--line);
 .tile.on{background:linear-gradient(135deg,#7c5cff30,#ff3d8b30);border-color:var(--a)}.tile.on .e{background:var(--grad)}.tile.on:after{content:"✓";position:absolute;top:10px;right:12px;color:var(--g);font-weight:800}
 .ro button,.ro input{pointer-events:none;opacity:.85}
 .seg{display:flex;gap:8px}.seg button{flex:1;padding:13px;border-radius:14px;background:#ffffff0d;font-weight:600}.seg .on,.tabs .on,.chip.on{background:var(--grad)}
-.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:6px}.tabs button{white-space:nowrap;padding:9px 14px;border-radius:12px;background:#ffffff0d;font-size:14px}
+.tabs{display:flex;gap:6px;overflow-x:auto;max-width:100%;padding-bottom:8px;margin-bottom:6px}.tabs button{white-space:nowrap;padding:9px 14px;border-radius:12px;background:#ffffff0d;font-size:14px}
 .chip{padding:8px 13px;border-radius:99px;background:#ffffff0f;border:1px solid var(--line);font-size:14px;margin:3px 2px}
 .pls{display:flex;gap:8px;flex-wrap:wrap}.pls span{background:#ffffff10;padding:8px 14px;border-radius:99px}
 .code{font-size:50px;font-weight:800;letter-spacing:10px;text-align:center;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -41,11 +41,11 @@ input{font:inherit;padding:15px;border-radius:16px;border:1px solid var(--line);
 .play{display:block;margin:0 auto 14px;background:var(--b);padding:12px 28px;border-radius:99px;font-weight:600;box-shadow:0 6px 24px #ff3d8b55}
 .dots{text-align:center;margin-bottom:8px}.dots span{display:inline-block;width:28px;height:7px;border-radius:5px;background:#ffffff22;margin:2px}.dots .on{background:var(--g)}
 .hint{color:var(--m);text-align:center;margin:0 0 12px}
-.cw{position:relative;width:250px;max-width:75%;margin:0 auto 12px;overflow:hidden;border-radius:18px;box-shadow:0 10px 40px #000a}.cw img{display:block;width:100%}
+.cw{position:relative;width:220px;max-width:70%;margin:0 auto 12px;overflow:hidden;border-radius:18px;box-shadow:0 10px 40px #000a}.cw img{display:block;width:100%}
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);position:absolute;inset:0}.tiles b{background:#07070d;transition:.4s}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .opt{background:#ffffff0d;border:1px solid var(--line);border-radius:16px;padding:14px;min-height:58px;font-weight:600}.opt:hover{border-color:var(--a);background:#7c5cff22}
-.opt img{width:100%;border-radius:10px;display:block;margin-bottom:8px}.opt span{font-size:13px;display:block}
+.opt img{width:100%;max-width:105px;aspect-ratio:1;object-fit:cover;border-radius:10px;display:block;margin:0 auto 8px}.opt span{font-size:13px;display:block}
 .cv{width:200px;max-width:65%;display:block;margin:4px auto 10px;border-radius:18px;box-shadow:0 10px 40px #000a}
 .wd{font-size:28px;font-weight:800;letter-spacing:5px;text-align:center;margin:12px 0;word-break:break-word}
 .kb{text-align:center}.kb button{margin:3px;width:38px;height:42px;border-radius:10px;background:#ffffff12;font-weight:600}.kb button:disabled{opacity:.2}
@@ -62,7 +62,7 @@ input{font:inherit;padding:15px;border-radius:16px;border:1px solid var(--line);
 #vol input{flex:1;min-width:60px;width:auto;padding:0;border:0;background:none;box-shadow:none;accent-color:#ff3d8b;height:24px;border-radius:0}
 
 /* ---- Yeni yerleşim: sol profil paneli + sağ içerik paneli ---- */
-.shell{max-width:1180px;margin:0 auto;padding:24px;display:grid;grid-template-columns:minmax(260px,1fr) 2fr;gap:28px;align-items:start}
+.shell{max-width:1180px;margin:0 auto;padding:24px;display:grid;grid-template-columns:minmax(240px,1fr) minmax(0,2fr);gap:28px;align-items:start}.shell>*{min-width:0}
 .side{position:sticky;top:24px;height:calc(100vh - 48px);display:flex;flex-direction:column;gap:18px;padding:24px 22px;background:#12121cd9;border:1px solid var(--line);border-radius:22px;backdrop-filter:blur(14px)}
 .me{display:flex;align-items:center;gap:16px;min-width:0}
 .mav{width:84px;height:84px;flex:none;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:44px;box-shadow:0 0 0 4px #7c5cff66,0 10px 30px #7c5cff55}
@@ -71,7 +71,7 @@ input{font:inherit;padding:15px;border-radius:16px;border:1px solid var(--line);
 .sidepl{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:6px}
 .sidepl .sh{font-size:12px;text-transform:uppercase;letter-spacing:1.6px;color:var(--m);font-weight:600;margin:4px 2px}
 .sp{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 12px;border-radius:14px;background:#ffffff0a}.sp.you{background:#7c5cff33}.sp span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sp b{white-space:nowrap}
-.panel{background:#0f0f1ae6;border:1px solid var(--line);border-radius:56px 56px 24px 24px;min-height:calc(100vh - 48px);backdrop-filter:blur(14px)}
+.panel{min-width:0;overflow:clip;background:#0f0f1ae6;border:1px solid var(--line);border-radius:56px 56px 24px 24px;min-height:calc(100vh - 48px);backdrop-filter:blur(14px)}
 .card .tile:not(.on),.card .chip:not(.on){background:#0b0b1466}
 .card .seg button:not(.on),.card .tabs button:not(.on){background:#0b0b1466}
 @media(min-width:821px){.lobpl{display:none}}
@@ -338,18 +338,26 @@ let AH=[];try{AH=JSON.parse(localStorage.auh||'[]')}catch(e){}
 const myId=()=>host?'host':(peer&&peer.id),stars=n=>'★'.repeat(n)+'☆'.repeat(5-n),
 ini=n=>n.split(' ').slice(0,2).map(w=>w[0]).join('').toLocaleUpperCase('tr'),
 aSend=o=>host?hrecv(o,'host'):hc.send(o),
-avt=c=>`<div class=av>${esc(ini(c.n))}${c.img?`<img src="${esc(c.img)}" onerror="this.remove()">`:''}</div>`,
+avt=c=>`<div class=av>${esc(ini(c.n))}${c.img?`<img src="${esc(c.img)}" referrerpolicy="no-referrer" onerror="this.remove()">`:''}</div>`,
 plist=()=>Object.entries(P).map(([id,p])=>`<div style="padding:6px 0;border-bottom:1px solid var(--line)"><div class=pr style="border:0;padding:4px"><span>${p.av} ${esc(p.n)}${id==myId()?' <small style="color:var(--m)">(sen)</small>':''}</span><b>$${p.m}</b></div><div>${(p.it||[]).map(x=>`<span class=chip>${esc(x.n)} ${'★'.repeat(x.st)}</span>`).join('')}</div></div>`).join('');
 const auSet=()=>`<div class=card><h2><b>1</b> Ünlü kategorisi</h2><div class=grid>${Object.entries(CE).map(([k,g])=>`<button class="tile ${cfg.ac.includes(k)?'on':''}" data-ac="${k}"><span class=e>${g.e}</span><b>${g.n}</b><small>${g.d}</small></button>`).join('')}</div></div>
 <div class=card><b>Nasıl oynanır?</b><p class=m style="margin:8px 0 0">Herkes <b>$${AUC}</b> ile başlar. ${AUN} ünlü sırayla açık arttırmaya çıkar. Teklifi yükselt, rakip pas geçerse ya da süre dolarsa en yüksek teklifi veren alır ve parasını öder. Her ünlü yıldızı kadar puan kazandırır. Sonunda en çok puanı toplayan kazanır, eşitlikte kalan para bakılır. Tek başına başlarsan rakibin 🤖 Bot olur.</p></div>`;
 
+/* Ünlü fotoğrafı: önce Wikipedia (üyeler dahil), sonra Deezer sanatçı resmi */
+const FC={};try{Object.assign(FC,JSON.parse(localStorage.fc1||'{}'))}catch(e){}
+async function wiki(lang,t){try{const r=await fetch(`https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(t.replace(/ /g,'_'))}?redirect=true`);if(!r.ok)return'';const d=await r.json();
+if(d.type=='disambiguation'||!d.thumbnail)return'';const a=norm(d.title||''),b=norm(t);if(lev(a,b)>Math.max(2,Math.floor(b.length/4)))return'';return d.thumbnail.source}catch(e){return''}}
+async function face(c){if(FC[c.n]){c.img=FC[c.n];return}
+let u=await wiki('tr',c.n)||await wiki('en',c.n);
+if(!u&&c.k=='tsing'){const id=await findId(c.n);if(id){const r=await jp('https://api.deezer.com/artist/'+id);u=r.picture_big||r.picture_medium||''}}
+if(u){c.img=u;FC[c.n]=u;try{localStorage.fc1=JSON.stringify(FC)}catch(e){}}}
 async function astart(){inGame=1;rv=1;bc({t:'au_load'});
 if(Object.keys(P).length<2)P.bot={n:'Bot',av:'🤖',s:0,bot:1};
 Object.values(P).forEach(p=>{p.m=AUC;p.it=[];p.s=0;p.d=0});
 const all=shuf(cfg.ac.flatMap(k=>CE[k].l.map(x=>({n:x[0],sub:x[1],st:x[2],k})))),fresh=all.filter(c=>!AH.includes(c.n)),src=fresh.length>=AUN*2?fresh:all,cs=[],cnt={};
 for(const c of src){if(cs.length>=AUN)break;if(c.k=='tmem'&&(cnt[c.sub]||0)>=2)continue;cnt[c.sub]=(cnt[c.sub]||0)+1;cs.push(c)}
 for(const c of all){if(cs.length>=AUN)break;if(!cs.includes(c))cs.push(c)}
-await Promise.all(cs.filter(c=>c.k=='tsing').map(c=>Promise.race([(async()=>{const id=await findId(c.n);if(id){const r=await jp('https://api.deezer.com/artist/'+id);c.img=r.picture_big||r.picture_medium||''}})(),new Promise(r=>setTimeout(r,7000))]).catch(()=>{})));
+await Promise.all(cs.map(c=>Promise.race([face(c),new Promise(r=>setTimeout(r,6000))]).catch(()=>{})));
 AH=AH.concat(cs.map(c=>c.n)).slice(-70);try{localStorage.auh=JSON.stringify(AH)}catch(e){}
 bc({t:'au_start',cs,P});aRound(0)}
 
