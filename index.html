@@ -8,7 +8,7 @@
 body{margin:0;font:16px/1.4 'Outfit',system-ui,sans-serif;background:var(--bg);color:var(--t);min-height:100vh;overflow-x:hidden}
 body:before,body:after{content:"";position:fixed;width:65vmax;height:65vmax;border-radius:50%;filter:blur(130px);opacity:.32;z-index:-1}
 body:before{background:var(--a);top:-32vmax;left:-22vmax}body:after{background:var(--b);bottom:-38vmax;right:-26vmax}
-#app{max-width:780px;margin:auto;padding:16px 14px 30px;animation:fi .35s}@keyframes fi{from{opacity:0;transform:translateY(8px)}}
+#app{max-width:780px;margin:auto;padding:56px 14px 30px;animation:fi .35s}@keyframes fi{from{opacity:0;transform:translateY(8px)}}
 .logo{text-align:center;font-size:48px;font-weight:800;margin:10px 0 0;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-1.5px}
 .sub{text-align:center;color:var(--m);margin:4px 0 18px}.c{text-align:center}.m{color:var(--m)}
 .eq{display:flex;gap:5px;justify-content:center;align-items:flex-end;height:46px;margin:22px 0 0}.eq i{width:7px;border-radius:4px;background:var(--grad);animation:eq 1s ease-in-out infinite alternate}
@@ -51,8 +51,16 @@ input{font:inherit;padding:15px;border-radius:16px;border:1px solid var(--line);
 .kb{text-align:center}.kb button{margin:3px;width:38px;height:42px;border-radius:10px;background:#ffffff12;font-weight:600}.kb button:disabled{opacity:.2}
 .res{font-size:60px;text-align:center}
 .pr{display:flex;align-items:center;gap:10px;padding:10px 6px;border-bottom:1px solid var(--line)}.pr:last-child{border:0}.pr i{width:28px;font-style:normal;color:var(--m)}.pr span{flex:1}.pr b{font-size:18px}.pr small{color:var(--g)}
+
 .sk{margin-top:10px}
-</style></head><body><div id="app"></div>
+.btn:disabled{opacity:.35;transform:none;cursor:not-allowed}.btn small{display:block;font-weight:400;font-size:11px;opacity:.85}
+.av{position:relative;width:120px;height:120px;border-radius:50%;margin:6px auto 10px;display:grid;place-items:center;font-size:40px;font-weight:800;background:var(--grad);overflow:hidden;box-shadow:0 10px 40px #7c5cff55}.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.stars{color:#fbbf24;letter-spacing:3px;font-size:22px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.three .btn{padding:12px 4px;font-size:18px}
+.bar{height:8px;border-radius:5px;background:#ffffff18;overflow:hidden;margin-top:12px}.bar i{display:block;height:100%;width:100%;background:var(--grad);transition:width .15s linear}
+#vol{position:fixed;top:10px;right:10px;z-index:50;display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:3px 14px 3px 4px;backdrop-filter:blur(14px)}
+#vol button{font-size:20px;background:none;width:34px;height:34px;padding:0}
+#vol input{width:90px;padding:0;border:0;background:none;box-shadow:none;accent-color:#ff3d8b;height:24px;border-radius:0}
+</style></head><body><div id="vol"><button id="vm" aria-label="Sessiz"></button><input type="range" id="vr" min="0" max="100" aria-label="Ses"></div><div id="app"></div>
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 const $=q=>document.querySelector(q),$$=q=>document.querySelectorAll(q),rnd=n=>Math.random()*n|0,pick=a=>a[rnd(a.length)],
@@ -67,6 +75,7 @@ const like=(v,t)=>{v=norm(v.split(' - ')[0]).replace(/^the /,'');t=norm(t).repla
 /* ---- Türler ve her birinde 30 sanatçı ---- */
 const G={
 tpop:{n:'Türkçe Pop',e:'🇹🇷',s:['Tarkan','Sezen Aksu','Hadise','Gülşen','Mabel Matiz','Kenan Doğulu','Sertab Erener','Murat Boz','Simge','Hande Yener','Edis','Demet Akalın','Mustafa Sandal','Ajda Pekkan','Aleyna Tilki','Yıldız Tilbe','Ziynet Sali','Funda Arar','Oğuzhan Koç','Zeynep Bastık','Berkay','Ebru Yaşar','Bengü','Gökhan Tepe','Emre Aydın','Hakan Peker','Sıla','Ece Seçkin','Gökhan Özen','Atiye']},
+tnew:{n:'Yeni Nesil Pop',e:'✨',s:['Manifest','AURA','KARM6','CRUSH','Radik5l','Mantra','Semicenk','Poizi','Zeynep Bastık','Aleyna Tilki','Edis','Simge','Gökhan Türkmen','Mert Demir','Doğu Swag','Irmak Arıcı','Emir Can İğrek']},
 trock:{n:'Türkçe Rock',e:'🎸',s:['Mor ve Ötesi','Duman','maNga','Teoman','Barış Manço','Cem Karaca','Yüksek Sadakat','Pinhani','Haluk Levent','Athena','Gripin','Şebnem Ferah','Kurtalan Ekspres','Replikas','Mavi Gri','MFÖ','Model','Gaye Su Akyol','Bulutsuzluk Özlemi','Kargo','Yeni Türkü','Moğollar','Erkin Koray','Hayko Cepkin','Büyük Ev Ablukada','Son Feci Bisiklet','Zakkum','Redd','Nev','Evrencan Gündüz']},
 arab:{n:'Arabesk',e:'🥀',s:['Müslüm Gürses','Ferdi Tayfur','Orhan Gencebay','İbrahim Tatlıses','Küçük Ceylan','Bergen','Ahmet Kaya','Hakan Altun','Emrah','Ümit Besen','Ebru Gündeş','Kibariye','Azer Bülbül','Cengiz Kurtoğlu','Mahsun Kırmızıgül','Kıvırcık Ali','Selami Şahin','Hakkı Bulut','Bülent Serttaş','Ferhat Göçer','Ankaralı Turgut','Muazzez Ersoy','Sibel Can','Serdar Ortaç','Latif Doğan','Burak Kut','Ceylan','Mansur Ark','Zerrin Özer','Nilüfer']},
 trap:{n:'Türkçe Rap',e:'🎤',s:['Ceza','Sagopa Kajmer','Ezhel','Norm Ender','Contra','Sansar Salvo','Hayki','Gazapizm','Lvbel C5','Murda','Uzi','Ben Fero','Khontkar','Defkhan','Motive','Killa Hakan','Server Uraz','Anıl Piyancı','Eypio','Aga B','Blok3','Tankurt Manas','Şehinşah','Heijan','Allame','Mero','Reynmen','Sefo','Elail','Ati242']},
@@ -99,39 +108,69 @@ adam:{n:'Adam Asmaca',e:'🪢',d:'Harf harf şarkıyı bul',k:'adam'},
 karma:{n:'Karma',e:'🎲',d:'Tüm oyunlar karışık gelir'}};
 
 /* ---- Veri: Deezer (sanatçının en çok dinlenen şarkıları, popülerlik sırasıyla) ---- */
-const BAD=/live|canlı|remix|karaoke|instrumental|acoustic|version|edit|demo|skit|interlude|intro|cover|tribute|piano|lullaby|slowed|sped|reverb|orchestra|\bmix\b/i,
+const BAD=/(^|[^a-z])(live|remix|karaoke|instrumental|acoustic|akustik|version|edit|demo|skit|interlude|intro|cover|tribute|piano|lullaby|slowed|sped|reverb|orchestra|mix)([^a-z]|$)|canlı/i,
 clean=s=>(s||'').replace(/\s*[\(\[].*?[\)\]]/g,'').replace(/\s+-\s+.*$/,'').trim();
 function jp(u,retry=1){return new Promise((ok,no)=>{const f='d'+Math.random().toString(36).slice(2),s=document.createElement('script'),to=setTimeout(()=>{s.remove();no()},9000);
 window[f]=d=>{clearTimeout(to);s.remove();delete window[f];ok(d)};s.onerror=()=>{clearTimeout(to);no()};s.src=u+(u.includes('?')?'&':'?')+'output=jsonp&callback='+f;document.head.append(s)})
 .then(d=>d&&d.error&&retry?new Promise(r=>setTimeout(r,1200)).then(()=>jp(u,0)):d)}
-let ARID={};try{ARID=JSON.parse(localStorage.arid||'{}')}catch(e){}
-async function topTr(name,lim){let id=ARID[name];
-if(!id){const r=await jp('https://api.deezer.com/search/artist?limit=3&q='+encodeURIComponent(name)),l=r.data||[];const a=l.find(x=>norm(x.name)==norm(name))||l[0];if(!a)return[];id=ARID[name]=a.id;try{localStorage.arid=JSON.stringify(ARID)}catch(e){}}
-const r=await jp(`https://api.deezer.com/artist/${id}/top?limit=${lim}`);
-return(r.data||[]).filter(x=>x.preview&&!BAD.test(x.title+' '+(x.album?x.album.title:''))).map(x=>({id:x.id,t:clean(x.title_short||x.title),a:x.artist.name,p:x.preview,i:x.album.cover_big,y:0,al:clean(x.album.title),ia:!/-\s*(single|ep)$/i.test(x.album.title)&&norm(clean(x.album.title))!=norm(clean(x.title_short||x.title))}))}
-async function build(){let names,lim;
-if(cfg.ar.length){names=shuf(cfg.ar).slice(0,14);lim=names.length<=3?30:names.length<=6?20:12}
-else{names=[...new Set(cfg.g.flatMap(k=>shuf(G[k].s).slice(0,Math.max(3,Math.ceil(12/cfg.g.length)))))];names=shuf(names).slice(0,14);lim=8}
-const seen=new Set(),out=[];(await Promise.all(names.map(n=>topTr(n,lim).catch(()=>[])))).flat().forEach(t=>{const k=norm(t.t);if(t.t&&!seen.has(k)){seen.add(k);out.push(t)}});return out}
+let ARID={};try{ARID=JSON.parse(localStorage.arid3||'{}')}catch(e){}
+const HINT={manifest:['Zamansızdık','Toz Pembe','Hileli','Snap','Tralala'],aura:['YUH','Tuzak','PES'],karm6:['İhtimal','Blok Blok','Keşke Benim Olsa'],crush:['CRUSH'],radik5l:['Hayran'],radikal:['Hayran'],mantra:['Bi Kiss']},
+ALIAS={radik5l:['Radik5l','Radikal'],radikal:['Radik5l','Radikal']},MISS=new Set(),KNOWN=new Set(Object.values(G).flatMap(g=>g.s)),
+sameName=(a,b)=>lev(norm(a),norm(b))<=1;
+let SEEN=[];try{SEEN=JSON.parse(localStorage.seen2||'[]')}catch(e){}
+/* Sanatçının Deezer id'sini bul. Yeni gruplar (Crush, Aura, Mantra...) yabancı aynı isimlilerle karışmasın diye şarkıyla doğrulanır */
+async function findId(name){if(ARID[name])return ARID[name];
+const sv=id=>{ARID[name]=id;try{localStorage.arid3=JSON.stringify(ARID)}catch(e){}return id},hs=HINT[norm(name)];
+if(hs){const ns=ALIAS[norm(name)]||[name];
+for(const sg of hs.slice(0,3))for(const nm of ns)for(const q of[`artist:"${nm}" track:"${sg}"`,`${nm} ${sg}`]){
+try{const r=await jp('https://api.deezer.com/search?limit=10&q='+encodeURIComponent(q)),t=(r.data||[]).find(x=>x.artist&&ns.some(n=>sameName(x.artist.name,n)));if(t)return sv(t.artist.id)}catch(e){}}
+try{const r=await jp('https://api.deezer.com/search/artist?limit=8&q='+encodeURIComponent(name));
+for(const c of(r.data||[]).filter(c=>ns.some(n=>sameName(c.name,n))).slice(0,4)){const tp=await jp(`https://api.deezer.com/artist/${c.id}/top?limit=50`);
+if((tp.data||[]).some(x=>hs.some(h=>like(x.title,h))))return sv(c.id)}}catch(e){}
+return 0}
+try{const r=await jp('https://api.deezer.com/search/artist?limit=6&q='+encodeURIComponent(name)),l=r.data||[];
+const a=l.filter(x=>norm(x.name)==norm(name)).sort((p,q)=>(q.nb_fan||0)-(p.nb_fan||0))[0]||l.find(x=>like(x.name,name))||(KNOWN.has(name)?null:l[0]);
+if(a)return sv(a.id)}catch(e){}
+return 0}
+/* En çok dinlenenleri (rank) al; sanatçının zirve şarkısına göre çok düşük kalanları ele */
+async function topTr(name,lim,frac,minK){const id=await findId(name);if(!id){MISS.add(name);return[]}
+const r=await jp(`https://api.deezer.com/artist/${id}/top?limit=50`);
+const base=(r.data||[]).filter(x=>x.preview&&x.artist&&x.album&&!BAD.test(x.title+' '+x.album.title));
+let L=base.filter(x=>x.artist.id==id);if(L.length<3)L=base;
+L.sort((a,b)=>(b.rank||0)-(a.rank||0));
+if(frac>0&&L.length){const mx=L[0].rank||0,cut=L.filter(x=>(x.rank||0)>=mx*frac);L=cut.length>=minK?cut:L.slice(0,minK)}
+if(!L.length)MISS.add(name);
+return L.slice(0,lim).map((x,i)=>({id:x.id,t:clean(x.title_short||x.title),a:x.artist.name,p:x.preview,i:x.album.cover_big,y:0,pi:i,al:clean(x.album.title),ia:!/-\s*(single|ep)$/i.test(x.album.title)&&norm(clean(x.album.title))!=norm(clean(x.title_short||x.title))}))}
+async function build(){MISS.clear();let names,lim,frac,minK;
+if(cfg.ar.length){names=shuf(cfg.ar).slice(0,Math.max(14,cfg.n+2));const k=names.length;lim=k<=2?40:k<=6?20:14;frac=k<=2?0:k<=6?.1:.2;minK=k<=6?10:8}
+else{const w=Math.min(cfg.n+6,26);names=[...new Set(cfg.g.flatMap(k=>shuf(G[k].s).slice(0,Math.max(3,Math.ceil(w/cfg.g.length)))))];names=shuf(names).slice(0,w);lim=12;frac=.25;minK=6}
+const seen=new Set(),out=[],res=[];for(let i=0;i<names.length;i+=9)res.push(...await Promise.all(names.slice(i,i+9).map(n=>topTr(n,lim,frac,minK).catch(()=>[]))));res.flat().forEach(t=>{const k=norm(t.t);if(t.t&&!seen.has(k)){seen.add(k);out.push(t)}});return out}
+const spread=T=>{const S=new Set(SEEN),g={},o=[];T.forEach(t=>{(g[t.a]=g[t.a]||[]).push(t);t.k=(t.pi||0)+Math.random()*4+(S.has(t.id)?100:0)});Object.values(g).forEach(a=>a.sort((x,y)=>x.k-y.k).forEach((t,i)=>{t.o=i+Math.random()+(S.has(t.id)?50:0);o.push(t)}));return o.sort((x,y)=>x.o-y.o)};
 const opts=(T,tr,f)=>{const o=[tr[f]];for(const x of shuf(T))if(x[f]&&!o.includes(x[f])){o.push(x[f]);if(o.length>3)break}return shuf(o)};
-function mk(pool,c){const T=shuf(pool),ids=Object.keys(M).slice(0,-1),qs=[],used=new Set();
+function mk(pool,c){const T=spread(pool),ids=Object.keys(M).slice(0,-1),qs=[],used=new Set();let la='';
 for(let k=0;k<c.n;k++){let m=pick(c.m);if(m=='karma')m=pick(ids);const cv=['blur','tile','album'].includes(m);
-const tr=T.find(x=>!used.has(x)&&(!cv||x.ia))||T.find(x=>!used.has(x));used.add(tr);
+const okx=x=>!used.has(x)&&(!cv||x.ia),tr=T.find(x=>okx(x)&&x.a!=la)||T.find(okx)||T.find(x=>!used.has(x));used.add(tr);la=tr.a;
 if(cv&&!tr.ia||(m=='ana'||m=='adam')&&!/[a-z]{3}/.test(norm(tr.t)))m='ad';
 const q={m,tr,rs:rnd(16),sw:rnd(2)};
-if(m=='eski')q.t2=T.find(x=>x!=tr&&!used.has(x))||T.find(x=>x!=tr);
+if(m=='eski'){q.t2=T.find(x=>x!=tr&&!used.has(x))||T.find(x=>x!=tr);used.add(q.t2)}
 if(m=='ana')q.sc=tr.t.toLocaleUpperCase('tr').split(' ').map(w=>{let s=w;for(let i=0;i<6&&s==w&&w.length>1;i++)s=shuf(w.split('')).join('');return s}).join(' ');
 qs.push(q)}return qs}
 function setOpts(qs,T){qs.forEach(q=>{const tr=q.tr;
+if(q.m=='sanatci'&&new Set(T.map(x=>x.a)).size<4)q.m='ad';
 if(q.m=='yil'&&!tr.y)q.m='ad';
 if(q.m=='eski'&&!(tr.y&&q.t2&&q.t2.y&&Math.abs(tr.y-q.t2.y)>1))q.m=tr.y?'yil':'ad';
 if(q.m=='ad')q.o=opts(T,tr,'t');if(q.m=='sanatci')q.o=opts(T,tr,'a');
-if(q.m=='album'){const o=[{k:tr.al,i:tr.i}];for(const x of shuf(T))if(x.ia&&!o.some(y=>norm(y.k)==norm(x.al))){o.push({k:x.al,i:x.i});if(o.length>3)break}q.o=shuf(o)}})}
+if(q.m=='album'){const o=[{k:tr.al,i:tr.i}];for(const x of shuf(T))if(x.ia&&!o.some(y=>norm(y.k)==norm(x.al))){o.push({k:x.al,i:x.i});if(o.length>3)break}q.o=shuf(o);if(q.o.length<3){q.m='ad';q.o=opts(T,tr,'t')}}})}
 async function years(qs){const ts=new Map();qs.forEach(q=>{ts.set(q.tr.id,q.tr);if(q.t2)ts.set(q.t2.id,q.t2)});
 await Promise.all([...ts.values()].map(t=>jp('https://api.deezer.com/track/'+t.id).then(r=>{t.y=+(r.release_date||'0').slice(0,4)}).catch(()=>{})))}
 
 /* ---- Ses ---- */
 const A=new Audio();let ta;
+let VOL=.8,MUTE=0;try{if(localStorage.vol!=null)VOL=Math.min(1,Math.max(0,+localStorage.vol||0));MUTE=localStorage.mute=='1'?1:0}catch(e){}
+function applyVol(){A.volume=VOL;A.muted=!!MUTE;$('#vm').textContent=MUTE||VOL==0?'🔇':VOL<.35?'🔈':VOL<.7?'🔉':'🔊';$('#vr').value=MUTE?0:Math.round(VOL*100);try{localStorage.vol=VOL;localStorage.mute=MUTE?1:0}catch(e){}}
+$('#vr').oninput=e=>{VOL=e.target.value/100;MUTE=0;applyVol()};
+$('#vm').onclick=()=>{if(MUTE||VOL==0){MUTE=0;if(VOL==0)VOL=.5}else MUTE=1;applyVol()};
+applyVol();
 addEventListener('pointerdown',()=>{if(!A.src){A.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';A.play().catch(()=>{})}},{once:true});
 A.addEventListener('playing',()=>document.body.classList.add('air'));['pause','ended'].forEach(e=>A.addEventListener(e,()=>document.body.classList.remove('air')));
 const stopAu=()=>{clearTimeout(ta);A.pause()};
@@ -142,21 +181,23 @@ A.onplaying=()=>{clearTimeout(ta);if(d)ta=setTimeout(()=>A.pause(),d*1000)};
 const p=A.play();if(p)p.catch(()=>{})}
 
 /* ---- Ağ (PeerJS, host-merkezli) ---- */
-let me={n:localStorage.n||'',av:localStorage.av||'😎'},peer,hc,host=0,code='',P={},cfg={g:['tpop','ypop','trock'],ar:[],m:['karma'],n:10},qs=[],L={},tmr,tint,rv,inGame=0,cur=0,atab='tpop';const conns={};
+let me={n:localStorage.n||'',av:localStorage.av||'😎'},peer,hc,host=0,code='',P={},cfg={g:['tpop','ypop','trock'],ar:[],m:['karma'],n:10,mode:'quiz',ac:['tsing','tmem']},AUs=null,AV=null,qs=[],L={},tmr,tint,rv,inGame=0,cur=0,atab='tpop';const conns={};
 const bc=m=>{Object.values(conns).forEach(c=>c.open&&c.send(m));handle(m)};
 const ans=p=>host?hrecv({t:'ans',pts:p},'host'):hc.send({t:'ans',pts:p});
-const chk=()=>{if(!rv&&Object.values(P).every(p=>p.d))reveal()};
+const chk=()=>{if(AUs)return aLeave();if(!rv&&Object.values(P).every(p=>p.d))reveal()};
 function mkHost(online){host=1;P={host:{n:me.n,av:me.av,s:0}};code='';
 if(!online)return lobby();if(typeof Peer=='undefined'){alert('PeerJS yüklenemedi, internetini kontrol et.');return home()}
 const tryC=()=>{code=Array.from({length:4},()=>pick('ABCDEFGHJKLMNPRSTUVYZ')).join('');peer=new Peer('nq-'+code);
 peer.on('open',()=>lobby());peer.on('error',e=>e.type=='unavailable-id'?tryC():(alert('Bağlantı hatası: '+e.type),home()));
 peer.on('connection',c=>{conns[c.peer]=c;c.on('data',d=>hrecv(d,c.peer));c.on('close',()=>{delete conns[c.peer];delete P[c.peer];inGame?chk():bc({t:'lobby',P,cfg})})})};tryC()}
 function hrecv(d,id){
+if(d.t=='au_bid'||d.t=='au_pass')return aRecv(d,id);
 if(d.t=='join'){if(inGame){conns[id].send({t:'busy'});return}P[id]={n:d.n,av:d.av,s:0};bc({t:'lobby',P,cfg})}
 if(d.t=='ans'&&inGame&&P[id]&&!P[id].d){const p=P[id];p.d=1;p.s+=d.pts;p.l=d.pts;chk()}}
-async function start(){inGame=1;bc({t:'load'});const pool=await build();
-if(pool.length<cfg.n+4){inGame=0;alert('Yeterli şarkı bulunamadı. Daha fazla sanatçı/tür seç veya tur sayısını azalt. (İnternet bağlantını da kontrol et.)');return bc({t:'lobby',P,cfg})}
-Object.values(P).forEach(p=>p.s=0);const q=mk(pool,cfg);await years(q);setOpts(q,pool);bc({t:'start',qs:q});nxt(0)}
+async function start(){if(cfg.mode=='auction')return astart();inGame=1;bc({t:'load'});const pool=await build(),miss=[...MISS].filter(n=>cfg.ar.includes(n));
+if(pool.length<cfg.n+4){inGame=0;alert((miss.length?'Deezer üzerinde önizlemeli şarkısı bulunamayan: '+miss.join(', ')+'\n\n':'')+'Yeterli şarkı bulunamadı. Daha fazla sanatçı/tür seç veya tur sayısını azalt. (İnternet bağlantını da kontrol et.)');return bc({t:'lobby',P,cfg})}
+if(miss.length)alert('Şu sanatçıların Deezer üzerinde önizlemeli şarkısı bulunamadı, bu oyunda atlandı: '+miss.join(', '));
+Object.values(P).forEach(p=>p.s=0);const q=mk(pool,cfg);await years(q);setOpts(q,pool);q.forEach(x=>{SEEN.push(x.tr.id);if(x.m=='eski'&&x.t2)SEEN.push(x.t2.id)});SEEN=SEEN.slice(-300);try{localStorage.seen2=JSON.stringify(SEEN)}catch(e){}bc({t:'start',qs:q});nxt(0)}
 function nxt(i){if(i>=qs.length){inGame=0;return bc({t:'end',P})}cur=i;rv=0;Object.values(P).forEach(p=>{p.d=0;p.l=0});bc({t:'q',i});clearTimeout(tmr);tmr=setTimeout(reveal,QT*1000+800)}
 function reveal(){if(rv)return;rv=1;clearTimeout(tmr);bc({t:'rev',i:cur,P});tmr=setTimeout(()=>nxt(cur+1),8000)}
 function handle(m){
@@ -164,6 +205,7 @@ if(m.t=='lobby'){P=m.P;cfg=m.cfg;lobby()}
 else if(m.t=='load')scr('<div class="card c" style="margin-top:28vh"><div class=eq style="margin:0 0 14px">'+'<i></i>'.repeat(9)+'</div><h3>En çok dinlenen şarkılar hazırlanıyor…</h3><p class=m>Birkaç saniye sürebilir</p></div>');
 else if(m.t=='start')qs=m.qs;
 else if(m.t=='q')rq(m.i);else if(m.t=='rev')rrev(m);else if(m.t=='end')rend();
+else if(m.t.startsWith('au_'))auH(m);
 else if(m.t=='busy'){alert('Oyun başlamış, bitmesini bekle.');home()}}
 function join(c){if(c.length!=4)return alert('4 harfli oda kodunu yaz');if(typeof Peer=='undefined')return alert('PeerJS yüklenemedi');
 scr('<div class="card c" style="margin-top:28vh"><div style="font-size:54px">🔌</div><h3>Odaya bağlanılıyor…</h3></div>');
@@ -173,7 +215,7 @@ peer.on('open',()=>{hc=peer.connect('nq-'+c,{reliable:true});hc.on('open',()=>{c
 
 /* ---- Ekranlar ---- */
 const rank=d=>Object.values(P).sort((a,b)=>b.s-a.s).map((p,i)=>`<div class=pr><i>${['🥇','🥈','🥉'][i]||i+1}</i><span>${p.av} ${esc(p.n)}</span>${d&&p.l?`<small>+${p.l}</small>`:''}<b>${p.s}</b></div>`).join('');
-function home(){stopAu();clearTimeout(tmr);clearInterval(tint);if(peer){peer.destroy();peer=null}Object.keys(conns).forEach(k=>delete conns[k]);host=0;inGame=0;code='';
+function home(){stopAu();clearTimeout(tmr);clearInterval(tint);if(AUs){clearTimeout(AUs.tm);clearTimeout(AUs.bt);AUs=null}if(peer){peer.destroy();peer=null}Object.keys(conns).forEach(k=>delete conns[k]);host=0;inGame=0;code='';
 const av=['😎','🤩','🦊','🐼','🐸','🦄','🐯','👻','🤖','🎸','🥁','🎧'];
 scr(`<div class=eq>${'<i></i>'.repeat(11)}</div><div class=logo>Nota Arena</div><p class=sub>Hesap yok, kayıt yok. Adını yaz, şarkıyı bil!</p>
 <div class=card><input id=nm maxlength=14 placeholder="Takma adın" value="${esc(me.n)}"><div class=avs>${av.map(a=>`<button class="${a==me.av?'on':''}" data-a="${a}">${a}</button>`).join('')}</div></div>
@@ -185,14 +227,14 @@ $('#solo').onclick=()=>{sv();mkHost(0)};$('#mkr').onclick=()=>{sv();mkHost(1)};$
 function lobby(){const ed=host,y=scrollY,ro=ed?'':'ro';
 scr(`<div class=logo style="font-size:32px">🎵 Lobi</div>`+(code?`<div class=card><div class="c m">ODA KODU</div><div class=code>${code}</div><button class="btn ghost" id=cp>🔗 Davet linkini kopyala</button></div>`:'')+
 `<h2>Oyuncular · ${Object.keys(P).length}</h2><div class=pls>${Object.values(P).map(p=>`<span>${p.av} ${esc(p.n)}</span>`).join('')}</div>
-<div class="${ro}"><h2><b>1</b> Müzik türleri</h2><div class=grid>${Object.entries(G).map(([k,g])=>`<button class="tile ${cfg.g.includes(k)?'on':''}" data-g="${k}"><span class=e>${g.e}</span><b>${g.n}</b></button>`).join('')}</div>
+<div class="${ro}"><h2>Oyun türü</h2><div class=seg><button class="${cfg.mode!='auction'?'on':''}" data-gm="quiz">🎵 Müzik Quiz</button><button class="${cfg.mode=='auction'?'on':''}" data-gm="auction">💸 Açık Arttırma</button></div>${cfg.mode=='auction'?auSet():`<h2><b>1</b> Müzik türleri</h2><div class=grid>${Object.entries(G).map(([k,g])=>`<button class="tile ${cfg.g.includes(k)?'on':''}" data-g="${k}"><span class=e>${g.e}</span><b>${g.n}</b></button>`).join('')}</div>
 <h2><b>2</b> Sanatçı seç <span style="text-transform:none;letter-spacing:0">(isteğe bağlı)</span></h2><div class=card><p class=m style="margin:0 0 10px">Sanatçı seçersen sadece onların en çok dinlenen şarkıları gelir. Hiç seçmezsen yukarıdaki türlerden karışık gelir.</p>
 <div class=tabs>${Object.entries(G).map(([k,g])=>`<button class="${k==atab?'on':''}" data-t="${k}">${g.e} ${g.n}</button>`).join('')}</div>
 <div>${G[atab].s.map(a=>`<button class="chip ${cfg.ar.includes(a)?'on':''}" data-r="${esc(a)}">${esc(a)}</button>`).join('')}</div>
 <div class=row style="margin-top:12px"><input id=ai placeholder="Listede yok mu? Sanatçı adını yaz…"><button class=btn id=ab>Ekle</button></div>
 ${cfg.ar.length?`<p class=m style="margin:14px 0 4px">Seçilenler · ${cfg.ar.length}</p><div>${cfg.ar.map(a=>`<button class="chip on" data-r="${esc(a)}">${esc(a)} ✕</button>`).join('')}</div><button class="btn ghost" id=ac style="margin-top:8px;padding:10px">Seçimi temizle</button>`:''}</div>
 <h2><b>3</b> Oyunlar</h2><div class=grid>${Object.entries(M).map(([k,g])=>`<button class="tile ${cfg.m.includes(k)?'on':''}" data-m="${k}"><span class=e>${g.e}</span><b>${g.n}</b><small>${g.d}</small></button>`).join('')}</div>
-<h2><b>4</b> Tur sayısı</h2><div class=seg>${[5,10,15,20].map(n=>`<button class="${cfg.n==n?'on':''}" data-n="${n}">${n}</button>`).join('')}</div></div>
+<h2><b>4</b> Tur sayısı</h2><div class=seg>${[5,10,15,20].map(n=>`<button class="${cfg.n==n?'on':''}" data-n="${n}">${n}</button>`).join('')}</div>`}</div>
 <div class=stick>${ed?'<button class=btn id=go style="font-size:18px">▶ Oyunu Başlat</button>':'<p class="c m">Ayarları oda sahibi seçer, oyun otomatik başlar…</p>'}<div style="height:8px"></div><button class="btn ghost" id=hm style="padding:10px">Çık</button></div>`);scrollTo(0,y);
 if(code)$('#cp').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(location.href.split('#')[0]+'#'+code);$('#cp').textContent='✅ Kopyalandı'};
 $('#hm').onclick=home;if(!ed)return;
@@ -201,7 +243,7 @@ $$('[data-g]').forEach(b=>b.onclick=()=>sel(cfg.g,b.dataset.g));$$('[data-m]').f
 $$('[data-t]').forEach(b=>b.onclick=()=>{atab=b.dataset.t;lobby()});$$('[data-r]').forEach(b=>b.onclick=()=>tg(cfg.ar,b.dataset.r));
 const add=()=>{const v=$('#ai').value.trim();if(v&&!cfg.ar.includes(v)){cfg.ar.push(v);up()}};$('#ab').onclick=add;$('#ai').onkeydown=e=>{if(e.key=='Enter')add()};
 if($('#ac'))$('#ac').onclick=()=>{cfg.ar=[];up()};
-$$('[data-n]').forEach(b=>b.onclick=()=>{cfg.n=+b.dataset.n;up()});$('#go').onclick=start}
+$$('[data-n]').forEach(b=>b.onclick=()=>{cfg.n=+b.dataset.n;up()});$$('[data-gm]').forEach(b=>b.onclick=()=>{cfg.mode=b.dataset.gm;up()});$$('[data-ac]').forEach(b=>b.onclick=()=>sel(cfg.ac,b.dataset.ac));$('#go').onclick=start}
 
 /* ---- Oyun ---- */
 const gin=ph=>`<div class=row><input id=gi placeholder="${ph}" autocomplete=off autocapitalize=off spellcheck=false><button class=btn id=gb>Tahmin</button></div>`;
@@ -209,7 +251,7 @@ const gw=cb=>{const f=()=>{const v=$('#gi').value.trim();if(v){$('#gi').value=''
 const ok=v=>like(v,L.q.tr.t),okA=v=>like(v,L.q.tr.al);
 const pts=()=>Math.max(30,Math.round(100+100*Math.max(0,1-(Date.now()-L.t0)/1e3/QT)-20*L.w));
 function fin(p,msg){if(L.d)return;L.d=1;stopAu();$('#st').innerHTML=`<div class=res>${p?'✅':'❌'}</div><h3 class=c>${esc(msg||'')}</h3><p class="c m">+${p} puan · diğerleri bekleniyor…</p>`;ans(p)}
-function rq(i){const q=qs[i],m=M[q.m],t=q.tr;L={i,q,m,st:0,w:0,t0:Date.now(),d:0,g:new Set()};clearInterval(tint);
+function rq(i){stopAu();const q=qs[i],m=M[q.m],t=q.tr;L={i,q,m,st:0,w:0,t0:Date.now(),d:0,g:new Set()};clearInterval(tint);
 scr(`<div class=hd><span class=pill>Tur ${i+1}/${qs.length}</span><span class=mode>${m.e} ${m.n}</span><div class=ring><svg viewBox="0 0 54 54"><circle cx=27 cy=27 r=22 class=rb /><circle id=rg cx=27 cy=27 r=22 class=rf /></svg><b id=tn>${QT}</b></div></div><div class=card id=st></div><h2>Skor</h2><div class=card id=sb>${rank(0)}</div>`);
 setTimeout(()=>{const r=$('#rg');if(r){r.style.transition=`stroke-dashoffset ${QT}s linear`;r.style.strokeDashoffset=138.2}},60);
 tint=setInterval(()=>{const n=$('#tn');if(n)n.textContent=Math.max(0,QT-Math.round((Date.now()-L.t0)/1000))},500);
@@ -243,9 +285,90 @@ $('#pl').onclick=()=>play(t.p);$$('.kb button').forEach(b=>b.onclick=()=>{if(L.d
 if(!open())return fin(pts(),'Doğru!');if(L.w>=6)return fin(0,'Asıldın!');draw()})};draw()}}
 function rrev(m){stopAu();clearInterval(tint);L.d=1;P=m.P;const q=qs[m.i],t=q.tr,r=$('#rg');if(r)r.style.transition='none';
 $('#st').innerHTML=`<img class=cv src="${esc(t.i)}"><h3 class=c>${esc(t.t)}</h3><p class="c m" style="margin:0 0 12px">${esc(t.a)}${t.y?' · '+t.y:''}${t.al?'<br>💿 '+esc(t.al):''}</p>`+(q.t2?`<p class="c m">Diğer şarkı: ${esc(q.t2.t)} – ${esc(q.t2.a)}${q.t2.y?' ('+q.t2.y+')':''}</p>`:'')+(host?'<button class="btn ghost" id=nx>⏭ Sonraki tur</button>':'');
-$('#sb').innerHTML=rank(1);if(host)$('#nx').onclick=()=>{clearTimeout(tmr);nxt(cur+1)};play(t.p,0,8)}
+$('#sb').innerHTML=rank(1);if(host)$('#nx').onclick=()=>{clearTimeout(tmr);nxt(cur+1)};play(t.p,0,7)}
 function rend(){stopAu();const r=Object.values(P).sort((a,b)=>b.s-a.s);
 scr(`<div class=logo>🏆 Sonuçlar</div><p class=sub>${esc(r[0].av)} ${esc(r[0].n)} kazandı!</p><div class=card>${rank(0)}</div>`+(host?'<button class=btn id=bk>↩ Lobiye dön</button>':'<p class="c m">Oda sahibi lobiye dönünce devam edebilirsiniz…</p>')+'<div style="height:10px"></div><button class="btn ghost" id=hm>Ana sayfa</button>');
 if(host)$('#bk').onclick=()=>bc({t:'lobby',P,cfg});$('#hm').onclick=home}
+/* ---- Açık Arttırma ---- */
+const AUC=20,AUN=5,AUT0=14,AUT1=7;
+const CE={
+tsing:{n:'Türk Ünlüler',d:'Şarkıcılar',e:'🎤',l:[
+['Tarkan','Pop',5],['Sezen Aksu','Pop',5],['Ajda Pekkan','Pop',5],['Barış Manço','Rock',5],['Müslüm Gürses','Arabesk',5],['İbrahim Tatlıses','Arabesk',5],['Zeki Müren','Sanat Müziği',5],['Bülent Ersoy','Sanat Müziği',5],
+['Sertab Erener','Pop',4],['Hadise','Pop',4],['Gülşen','Pop',4],['Mabel Matiz','Pop',4],['Murat Boz','Pop',4],['Hande Yener','Pop',4],['Ceza','Rap',4],['Ezhel','Rap',4],['Cem Karaca','Rock',4],['Ferdi Tayfur','Arabesk',4],['Orhan Gencebay','Arabesk',4],['Ahmet Kaya','Özgün',4],['Şebnem Ferah','Rock',4],
+['Kenan Doğulu','Pop',3],['Edis','Pop',3],['Simge','Pop',3],['Aleyna Tilki','Pop',3],['Zeynep Bastık','Pop',3],['Mustafa Sandal','Pop',3],['Demet Akalın','Pop',3],['Yıldız Tilbe','Pop',3],['Ebru Gündeş','Pop',3],['Sibel Can','Pop',3],['Serdar Ortaç','Pop',3],['Sıla','Pop',3],['Teoman','Rock',3],['Sagopa Kajmer','Rap',3],['Mero','Rap',3],['Reynmen','Pop',3],['Semicenk','Pop',3],['Nilüfer','Pop',3],['Candan Erçetin','Pop',3],['Emrah','Arabesk',3],
+['Hakan Peker','Pop',2],['Funda Arar','Pop',2],['Gökhan Özen','Pop',2],['Ece Seçkin','Pop',2],['Bengü','Pop',2],['Emre Aydın','Pop',2],['Ziynet Sali','Pop',2],['Gökhan Tepe','Pop',2]]},
+tmem:{n:'TR Pop Üyeleri',d:'Yeni nesil grup üyeleri',e:'✨',l:[
+['Sueda Uluca','Manifest',5],['Lidya Pınar','Manifest',4],['Hilal Yelekçi','Manifest',4],['Mina Solak','Manifest',4],['Esin Bahat','Manifest',4],['Zeynep Sude Oktay','Manifest',3],
+['Aslı Göztaşı','AURA',3],['Meri Aslan','AURA',3],['Suzy Roumenov','AURA',2],['Esra Mutlu','AURA',2],
+['Ada Atılgan','KARM6',3],['Adilcan Bilgin','KARM6',3],['Ezgi Akliman','KARM6',2],['Özlem Naz Gözcü','KARM6',2],['Erdeniz Telli','KARM6',2],['Cem Suha Kurt','KARM6',2],
+['Delfin Kayra Uraz','Mantra',3],['Sıla Nisa Bozkurt','Mantra',3],['Doğa Bezek','Mantra',2],['Güniz Ok','Mantra',2],['Şeyma Akso','Mantra',2],
+['Efe Şan','CRUSH',4],['Arda Soydoğan','CRUSH',3],['Miraç Fırat','CRUSH',3],['Oğuzhan Çifçi','CRUSH',3],['Batu Cengiz','CRUSH',3],['Barış Çağan Yüksekkaya','CRUSH',3],['Milan Önder','CRUSH',3],
+['Vedat Çelik','Radikal',3],['Yusuf Emre Akbıyık','Radikal',3],['Yuşa Akbıyık','Radikal',3],['İbrahim Can Kaya','Radikal',3]]}};
+let AH=[];try{AH=JSON.parse(localStorage.auh||'[]')}catch(e){}
+const myId=()=>host?'host':(peer&&peer.id),stars=n=>'★'.repeat(n)+'☆'.repeat(5-n),
+ini=n=>n.split(' ').slice(0,2).map(w=>w[0]).join('').toLocaleUpperCase('tr'),
+aSend=o=>host?hrecv(o,'host'):hc.send(o),
+avt=c=>`<div class=av>${esc(ini(c.n))}${c.img?`<img src="${esc(c.img)}" onerror="this.remove()">`:''}</div>`,
+plist=()=>Object.entries(P).map(([id,p])=>`<div style="padding:6px 0;border-bottom:1px solid var(--line)"><div class=pr style="border:0;padding:4px"><span>${p.av} ${esc(p.n)}${id==myId()?' <small style="color:var(--m)">(sen)</small>':''}</span><b>$${p.m}</b></div><div>${(p.it||[]).map(x=>`<span class=chip>${esc(x.n)} ${'★'.repeat(x.st)}</span>`).join('')}</div></div>`).join('');
+const auSet=()=>`<h2><b>1</b> Ünlü kategorisi</h2><div class=grid>${Object.entries(CE).map(([k,g])=>`<button class="tile ${cfg.ac.includes(k)?'on':''}" data-ac="${k}"><span class=e>${g.e}</span><b>${g.n}</b><small>${g.d}</small></button>`).join('')}</div>
+<div class=card style="margin-top:14px"><b>Nasıl oynanır?</b><p class=m style="margin:8px 0 0">Herkes <b>$${AUC}</b> ile başlar. ${AUN} ünlü sırayla açık arttırmaya çıkar. Teklifi yükselt, rakip pas geçerse ya da süre dolarsa en yüksek teklifi veren alır ve parasını öder. Her ünlü yıldızı kadar puan kazandırır. Sonunda en çok puanı toplayan kazanır, eşitlikte kalan para bakılır. Tek başına başlarsan rakibin 🤖 Bot olur.</p></div>`;
+
+async function astart(){inGame=1;rv=1;bc({t:'au_load'});
+if(Object.keys(P).length<2)P.bot={n:'Bot',av:'🤖',s:0,bot:1};
+Object.values(P).forEach(p=>{p.m=AUC;p.it=[];p.s=0;p.d=0});
+const all=shuf(cfg.ac.flatMap(k=>CE[k].l.map(x=>({n:x[0],sub:x[1],st:x[2],k})))),fresh=all.filter(c=>!AH.includes(c.n)),src=fresh.length>=AUN*2?fresh:all,cs=[],cnt={};
+for(const c of src){if(cs.length>=AUN)break;if(c.k=='tmem'&&(cnt[c.sub]||0)>=2)continue;cnt[c.sub]=(cnt[c.sub]||0)+1;cs.push(c)}
+for(const c of all){if(cs.length>=AUN)break;if(!cs.includes(c))cs.push(c)}
+await Promise.all(cs.filter(c=>c.k=='tsing').map(c=>Promise.race([(async()=>{const id=await findId(c.n);if(id){const r=await jp('https://api.deezer.com/artist/'+id);c.img=r.picture_big||r.picture_medium||''}})(),new Promise(r=>setTimeout(r,7000))]).catch(()=>{})));
+AH=AH.concat(cs.map(c=>c.n)).slice(-70);try{localStorage.auh=JSON.stringify(AH)}catch(e){}
+bc({t:'au_start',cs,P});aRound(0)}
+
+const aUpd=()=>bc({t:'au_upd',bid:AUs.bid,lead:AUs.lead,pass:Object.keys(AUs.pass),ms:Math.max(0,AUs.dl-Date.now()),P}),
+aTimer=ms=>{clearTimeout(AUs.tm);AUs.dl=Date.now()+ms;AUs.tm=setTimeout(aClose,ms)};
+function aRound(i){AUs={i,bid:0,lead:null,pass:{},tm:null,bt:null};const b=P.bot;
+if(b)AUs.bl=Math.max(0,Math.min(b.m-(AV.cs.length-1-i),Math.round(AV.cs[i].st*(1.2+Math.random()*1.3)+Math.random()*2)));
+aTimer(AUT0*1000);bc({t:'au_round',i,ms:AUT0*1000,P});aBot(1)}
+function aRecv(d,id){if(!AUs||AUs.done||AUs.fin||!P[id])return;const p=P[id];
+if(d.t=='au_bid'){const a=Math.floor(+d.amt);if(!(a>AUs.bid&&a<=p.m)||AUs.pass[id]||AUs.lead==id)return;aBid(id,a)}
+else if(d.t=='au_pass'&&!AUs.pass[id]&&AUs.lead!=id){AUs.pass[id]=1;aUpd();aCheck()}}
+function aBid(id,a){AUs.bid=a;AUs.lead=id;aTimer(Math.max(AUs.dl-Date.now(),AUT1*1000));aUpd();aCheck();if(!AUs.fin)aBot()}
+function aCheck(){if(!AUs||AUs.done||AUs.fin)return;const can=id=>P[id]&&!AUs.pass[id]&&AUs.lead!=id&&P[id].m>AUs.bid;
+if(!Object.keys(P).some(can)){AUs.fin=1;clearTimeout(AUs.tm);clearTimeout(AUs.bt);AUs.tm=setTimeout(aClose,AUs.lead?1300:300)}}
+function aBot(first){const b=P.bot;if(!b||!AUs||AUs.done||AUs.fin||AUs.pass.bot||AUs.lead=='bot')return;clearTimeout(AUs.bt);
+AUs.bt=setTimeout(()=>{if(!AUs||AUs.done||AUs.fin||AUs.pass.bot||AUs.lead=='bot')return;
+const nb=AUs.bid+1+(Math.random()<.3?1:0);
+if(nb<=AUs.bl&&nb<=b.m)aBid('bot',nb);else{AUs.pass.bot=1;aUpd();aCheck()}},first?2000+Math.random()*3500:1200+Math.random()*2200)}
+function aClose(){if(!AUs||AUs.done)return;AUs.done=1;clearTimeout(AUs.tm);clearTimeout(AUs.bt);const c=AV.cs[AUs.i],w=AUs.lead&&P[AUs.lead]?AUs.lead:null;
+if(w){P[w].m-=AUs.bid;P[w].it.push({n:c.n,st:c.st});P[w].s=P[w].it.reduce((a,x)=>a+x.st,0)}
+bc({t:'au_sold',i:AUs.i,w,price:w?AUs.bid:0,P});AUs.tm=setTimeout(aNext,5500)}
+function aNext(){if(!AUs)return;clearTimeout(AUs.tm);AUs.i+1<AV.cs.length?aRound(AUs.i+1):aEnd()}
+function aEnd(){inGame=0;rv=0;if(AUs){clearTimeout(AUs.tm);clearTimeout(AUs.bt)}AUs=null;bc({t:'au_end',P})}
+function aLeave(){if(!AUs)return;if(Object.keys(P).length<2)return aEnd();aUpd();aCheck()}
+
+function auH(m){
+if(m.t=='au_load')scr('<div class="card c" style="margin-top:28vh"><div class=eq style="margin:0 0 14px">'+'<i></i>'.repeat(9)+'</div><h3>Ünlüler hazırlanıyor…</h3><p class=m>Açık arttırma birazdan başlıyor</p></div>');
+else if(m.t=='au_start'){AV={cs:m.cs,i:0,bid:0,lead:null,pass:[]};P=m.P}
+else if(m.t=='au_round'){AV.i=m.i;AV.bid=0;AV.lead=null;AV.pass=[];AV.tot=m.ms;AV.dl=Date.now()+m.ms;P=m.P;auR()}
+else if(m.t=='au_upd'){AV.bid=m.bid;AV.lead=m.lead;AV.pass=m.pass;AV.tot=Math.max(1000,m.ms);AV.dl=Date.now()+m.ms;P=m.P;auR()}
+else if(m.t=='au_sold'){AV.w=m.w;AV.price=m.price;P=m.P;auS()}
+else if(m.t=='au_end'){P=m.P;auE()}}
+function auR(){clearInterval(tint);const c=AV.cs[AV.i],me=myId(),pm=P[me]||{m:0},ld=P[AV.lead],pass=AV.pass.includes(me),isL=AV.lead==me,can=!pass&&!isL&&AV.bid<pm.m;
+const bt=n=>{const a=AV.bid+n;return `<button class=btn data-b="${a}" ${can&&a<=pm.m?'':'disabled'}>+$${n}<small>→ $${a}</small></button>`};
+scr(`<div class=hd><span class=pill>Tur ${AV.i+1}/${AV.cs.length}</span><span class=mode>💸 Açık Arttırma</span><span class=pill id=atm>⏱</span></div>
+<div class="card c">${avt(c)}<h3 style="font-size:24px">${esc(c.n)}</h3><div class=m>${esc(c.sub)}</div><div class=stars>${stars(c.st)}</div><p class=m style="margin:4px 0 0">Alırsan +${c.st} puan</p></div>
+<div class="card c"><div class=m>Şu anki teklif</div><div class=code style="font-size:46px;letter-spacing:0">${AV.bid?'$'+AV.bid:'—'}</div><div>${ld?(isL?'🔥 Teklif sende':esc(ld.av+' '+ld.n)):'Henüz teklif yok'}</div><div class=bar><i id=abar></i></div></div>
+<div class=card><div class=hd style="margin-bottom:10px"><b>💵 Paran: $${pm.m}</b><span class=m>${pass?'Pas geçtin':isL?'Lidersin':''}</span></div><div class=three>${bt(1)}${bt(2)}${bt(5)}</div><div style="height:10px"></div><button class="btn ghost" id=ap ${pass||isL?'disabled':''}>🚫 Pas · bu ünlüden vazgeç</button></div>
+<h2>Oyuncular</h2><div class=card>${plist()}</div>`);
+$$('[data-b]').forEach(b=>b.onclick=()=>aSend({t:'au_bid',amt:+b.dataset.b}));$('#ap').onclick=()=>aSend({t:'au_pass'});
+const tk=()=>{const r=Math.max(0,AV.dl-Date.now()),t=$('#atm'),b=$('#abar');if(t)t.textContent='⏱ '+Math.ceil(r/1000)+' sn';if(b)b.style.width=Math.min(100,100*r/AV.tot)+'%'};tk();tint=setInterval(tk,150)}
+function auS(){clearInterval(tint);const c=AV.cs[AV.i],w=P[AV.w];
+scr(`<div class=hd><span class=pill>Tur ${AV.i+1}/${AV.cs.length}</span><span class=mode>💸 Açık Arttırma</span><span class=pill>${w?'SATILDI':'SATILMADI'}</span></div>
+<div class="card c">${avt(c)}<h3 style="font-size:24px">${esc(c.n)}</h3><div class=stars>${stars(c.st)}</div>${w?`<div class=res style="font-size:44px">🔨</div><h3>${esc(w.av+' '+w.n)} aldı</h3><p class=m>$${AV.price} ödedi · +${c.st} puan</p>`:`<div class=res style="font-size:44px">🤷</div><h3>Kimse almadı</h3>`}</div>
+<h2>Durum</h2><div class=card>${plist()}</div>`+(host?'<button class="btn ghost" id=nx>⏭ Sonraki</button>':'<p class="c m">Sıradaki ünlü birazdan…</p>'));
+if(host)$('#nx').onclick=aNext}
+function auE(){clearInterval(tint);stopAu();const r=Object.values(P).map(p=>({...p,tot:(p.it||[]).reduce((a,x)=>a+x.st,0)})).sort((a,b)=>b.tot-a.tot||b.m-a.m),tie=r.length>1&&r[0].tot==r[1].tot&&r[0].m==r[1].m;
+scr(`<div class=logo>🏆 Sonuç</div><p class=sub>${tie?'Berabere!':esc(r[0].av+' '+r[0].n)+' kazandı!'}</p>`+r.map((p,i)=>`<div class=card><div class=pr style="border:0;padding:0"><i>${['🥇','🥈','🥉'][i]||i+1}</i><span>${p.av} ${esc(p.n)}</span><b>${p.tot} ★</b></div><p class=m style="margin:6px 0">💵 Kalan: $${p.m}</p><div>${(p.it||[]).length?p.it.map(x=>`<span class=chip>${esc(x.n)} ${'★'.repeat(x.st)}</span>`).join(''):'<span class=m>Kimseyi alamadı</span>'}</div></div>`).join('')+(host?'<button class=btn id=bk>↩ Lobiye dön</button>':'<p class="c m">Oda sahibi lobiye dönünce devam edebilirsiniz…</p>')+'<div style="height:10px"></div><button class="btn ghost" id=hm>Ana sayfa</button>');
+if(host)$('#bk').onclick=()=>{delete P.bot;bc({t:'lobby',P,cfg})};$('#hm').onclick=home}
+
 home();
 </script></body></html>
