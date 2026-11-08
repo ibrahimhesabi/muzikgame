@@ -8,7 +8,7 @@
 body{margin:0;font:16px/1.4 'Outfit',system-ui,sans-serif;background:var(--bg);color:var(--t);min-height:100vh;overflow-x:hidden}
 body:before,body:after{content:"";position:fixed;width:65vmax;height:65vmax;border-radius:50%;filter:blur(130px);opacity:.32;z-index:-1}
 body:before{background:var(--a);top:-32vmax;left:-22vmax}body:after{background:var(--b);bottom:-38vmax;right:-26vmax}
-#app{max-width:780px;margin:auto;padding:56px 14px 30px;animation:fi .35s}@keyframes fi{from{opacity:0;transform:translateY(8px)}}
+#app{max-width:780px;margin:auto;padding:16px 14px 30px;animation:fi .35s}@keyframes fi{from{opacity:0;transform:translateY(8px)}}
 .logo{text-align:center;font-size:48px;font-weight:800;margin:10px 0 0;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-1.5px}
 .sub{text-align:center;color:var(--m);margin:4px 0 18px}.c{text-align:center}.m{color:var(--m)}
 .eq{display:flex;gap:5px;justify-content:center;align-items:flex-end;height:46px;margin:22px 0 0}.eq i{width:7px;border-radius:4px;background:var(--grad);animation:eq 1s ease-in-out infinite alternate}
@@ -52,10 +52,7 @@ input{font:inherit;padding:15px;border-radius:16px;border:1px solid var(--line);
 .res{font-size:60px;text-align:center}
 .pr{display:flex;align-items:center;gap:10px;padding:10px 6px;border-bottom:1px solid var(--line)}.pr:last-child{border:0}.pr i{width:28px;font-style:normal;color:var(--m)}.pr span{flex:1}.pr b{font-size:18px}.pr small{color:var(--g)}
 .sk{margin-top:10px}
-#vol{position:fixed;top:10px;right:10px;z-index:50;display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:3px 14px 3px 4px;backdrop-filter:blur(14px)}
-#vol button{font-size:20px;background:none;width:34px;height:34px;padding:0}
-#vol input{width:90px;padding:0;border:0;background:none;box-shadow:none;accent-color:#ff3d8b;height:24px;border-radius:0}
-</style></head><body><div id="vol"><button id="vm" aria-label="Sessiz"></button><input type="range" id="vr" min="0" max="100" aria-label="Ses"></div><div id="app"></div>
+</style></head><body><div id="app"></div>
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 const $=q=>document.querySelector(q),$$=q=>document.querySelectorAll(q),rnd=n=>Math.random()*n|0,pick=a=>a[rnd(a.length)],
@@ -70,7 +67,6 @@ const like=(v,t)=>{v=norm(v.split(' - ')[0]).replace(/^the /,'');t=norm(t).repla
 /* ---- Türler ve her birinde 30 sanatçı ---- */
 const G={
 tpop:{n:'Türkçe Pop',e:'🇹🇷',s:['Tarkan','Sezen Aksu','Hadise','Gülşen','Mabel Matiz','Kenan Doğulu','Sertab Erener','Murat Boz','Simge','Hande Yener','Edis','Demet Akalın','Mustafa Sandal','Ajda Pekkan','Aleyna Tilki','Yıldız Tilbe','Ziynet Sali','Funda Arar','Oğuzhan Koç','Zeynep Bastık','Berkay','Ebru Yaşar','Bengü','Gökhan Tepe','Emre Aydın','Hakan Peker','Sıla','Ece Seçkin','Gökhan Özen','Atiye']},
-tnew:{n:'Yeni Nesil Pop',e:'✨',s:['Manifest','AURA','KARM6','CRUSH','Radik5l','Semicenk','Poizi','Zeynep Bastık','Aleyna Tilki','Edis','Simge','Gökhan Türkmen','Mert Demir','Doğu Swag','Irmak Arıcı','Emir Can İğrek']},
 trock:{n:'Türkçe Rock',e:'🎸',s:['Mor ve Ötesi','Duman','maNga','Teoman','Barış Manço','Cem Karaca','Yüksek Sadakat','Pinhani','Haluk Levent','Athena','Gripin','Şebnem Ferah','Kurtalan Ekspres','Replikas','Mavi Gri','MFÖ','Model','Gaye Su Akyol','Bulutsuzluk Özlemi','Kargo','Yeni Türkü','Moğollar','Erkin Koray','Hayko Cepkin','Büyük Ev Ablukada','Son Feci Bisiklet','Zakkum','Redd','Nev','Evrencan Gündüz']},
 arab:{n:'Arabesk',e:'🥀',s:['Müslüm Gürses','Ferdi Tayfur','Orhan Gencebay','İbrahim Tatlıses','Küçük Ceylan','Bergen','Ahmet Kaya','Hakan Altun','Emrah','Ümit Besen','Ebru Gündeş','Kibariye','Azer Bülbül','Cengiz Kurtoğlu','Mahsun Kırmızıgül','Kıvırcık Ali','Selami Şahin','Hakkı Bulut','Bülent Serttaş','Ferhat Göçer','Ankaralı Turgut','Muazzez Ersoy','Sibel Can','Serdar Ortaç','Latif Doğan','Burak Kut','Ceylan','Mansur Ark','Zerrin Özer','Nilüfer']},
 trap:{n:'Türkçe Rap',e:'🎤',s:['Ceza','Sagopa Kajmer','Ezhel','Norm Ender','Contra','Sansar Salvo','Hayki','Gazapizm','Lvbel C5','Murda','Uzi','Ben Fero','Khontkar','Defkhan','Motive','Killa Hakan','Server Uraz','Anıl Piyancı','Eypio','Aga B','Blok3','Tankurt Manas','Şehinşah','Heijan','Allame','Mero','Reynmen','Sefo','Elail','Ati242']},
@@ -108,43 +104,34 @@ clean=s=>(s||'').replace(/\s*[\(\[].*?[\)\]]/g,'').replace(/\s+-\s+.*$/,'').trim
 function jp(u,retry=1){return new Promise((ok,no)=>{const f='d'+Math.random().toString(36).slice(2),s=document.createElement('script'),to=setTimeout(()=>{s.remove();no()},9000);
 window[f]=d=>{clearTimeout(to);s.remove();delete window[f];ok(d)};s.onerror=()=>{clearTimeout(to);no()};s.src=u+(u.includes('?')?'&':'?')+'output=jsonp&callback='+f;document.head.append(s)})
 .then(d=>d&&d.error&&retry?new Promise(r=>setTimeout(r,1200)).then(()=>jp(u,0)):d)}
-let ARID={};try{ARID=JSON.parse(localStorage.arid2||'{}')}catch(e){}
-const HINT={manifest:['Zamansızdık','Toz Pembe','Snap'],aura:['YUH!','Tuzak','PES'],karm6:['İhtimal','Blok Blok'],crush:['CRUSH!'],radik5l:['Hayran'],radikal:['Hayran']};
+let ARID={};try{ARID=JSON.parse(localStorage.arid||'{}')}catch(e){}
 async function topTr(name,lim){let id=ARID[name];
-if(!id&&HINT[norm(name)]){for(const sg of HINT[norm(name)]){try{const r=await jp('https://api.deezer.com/search?limit=8&q='+encodeURIComponent(`artist:"${name}" track:"${sg}"`)),t=(r.data||[]).find(x=>x.artist&&lev(norm(x.artist.name),norm(name))<=1);if(t){id=ARID[name]=t.artist.id;try{localStorage.arid2=JSON.stringify(ARID)}catch(e){}break}}catch(e){}}if(!id)return[]}
-if(!id){const r=await jp('https://api.deezer.com/search/artist?limit=6&q='+encodeURIComponent(name)),l=r.data||[];const a=l.filter(x=>norm(x.name)==norm(name)).sort((p,q)=>(q.nb_fan||0)-(p.nb_fan||0))[0]||l[0];if(!a)return[];id=ARID[name]=a.id;try{localStorage.arid2=JSON.stringify(ARID)}catch(e){}}
-const r=await jp(`https://api.deezer.com/artist/${id}/top?limit=30`);
-return(r.data||[]).filter(x=>x.preview&&!BAD.test(x.title+' '+(x.album?x.album.title:''))).slice(0,lim).map(x=>({id:x.id,t:clean(x.title_short||x.title),a:x.artist.name,p:x.preview,i:x.album.cover_big,y:0,al:clean(x.album.title),ia:!/-\s*(single|ep)$/i.test(x.album.title)&&norm(clean(x.album.title))!=norm(clean(x.title_short||x.title))}))}
+if(!id){const r=await jp('https://api.deezer.com/search/artist?limit=3&q='+encodeURIComponent(name)),l=r.data||[];const a=l.find(x=>norm(x.name)==norm(name))||l[0];if(!a)return[];id=ARID[name]=a.id;try{localStorage.arid=JSON.stringify(ARID)}catch(e){}}
+const r=await jp(`https://api.deezer.com/artist/${id}/top?limit=${lim}`);
+return(r.data||[]).filter(x=>x.preview&&!BAD.test(x.title+' '+(x.album?x.album.title:''))).map(x=>({id:x.id,t:clean(x.title_short||x.title),a:x.artist.name,p:x.preview,i:x.album.cover_big,y:0,al:clean(x.album.title),ia:!/-\s*(single|ep)$/i.test(x.album.title)&&norm(clean(x.album.title))!=norm(clean(x.title_short||x.title))}))}
 async function build(){let names,lim;
-if(cfg.ar.length){names=shuf(cfg.ar).slice(0,Math.max(14,cfg.n+2));lim=names.length<=2?30:names.length<=6?16:10}
-else{const w=Math.min(cfg.n+6,26);names=[...new Set(cfg.g.flatMap(k=>shuf(G[k].s).slice(0,Math.max(3,Math.ceil(w/cfg.g.length)))))];names=shuf(names).slice(0,w);lim=6}
-const seen=new Set(),out=[],res=[];for(let i=0;i<names.length;i+=9)res.push(...await Promise.all(names.slice(i,i+9).map(n=>topTr(n,lim).catch(()=>[]))));res.flat().forEach(t=>{const k=norm(t.t);if(t.t&&!seen.has(k)){seen.add(k);out.push(t)}});return out}
-const spread=T=>{const g={};shuf(T).forEach(t=>(g[t.a]=g[t.a]||[]).push(t));const ks=Object.keys(g),o=[];for(let i=0;ks.some(k=>g[k][i]);i++)shuf(ks).forEach(k=>g[k][i]&&o.push(g[k][i]));return o};
+if(cfg.ar.length){names=shuf(cfg.ar).slice(0,14);lim=names.length<=3?30:names.length<=6?20:12}
+else{names=[...new Set(cfg.g.flatMap(k=>shuf(G[k].s).slice(0,Math.max(3,Math.ceil(12/cfg.g.length)))))];names=shuf(names).slice(0,14);lim=8}
+const seen=new Set(),out=[];(await Promise.all(names.map(n=>topTr(n,lim).catch(()=>[])))).flat().forEach(t=>{const k=norm(t.t);if(t.t&&!seen.has(k)){seen.add(k);out.push(t)}});return out}
 const opts=(T,tr,f)=>{const o=[tr[f]];for(const x of shuf(T))if(x[f]&&!o.includes(x[f])){o.push(x[f]);if(o.length>3)break}return shuf(o)};
-function mk(pool,c){const T=spread(pool),ids=Object.keys(M).slice(0,-1),qs=[],used=new Set();let la='';
+function mk(pool,c){const T=shuf(pool),ids=Object.keys(M).slice(0,-1),qs=[],used=new Set();
 for(let k=0;k<c.n;k++){let m=pick(c.m);if(m=='karma')m=pick(ids);const cv=['blur','tile','album'].includes(m);
-const okx=x=>!used.has(x)&&(!cv||x.ia),tr=T.find(x=>okx(x)&&x.a!=la)||T.find(okx)||T.find(x=>!used.has(x));used.add(tr);la=tr.a;
+const tr=T.find(x=>!used.has(x)&&(!cv||x.ia))||T.find(x=>!used.has(x));used.add(tr);
 if(cv&&!tr.ia||(m=='ana'||m=='adam')&&!/[a-z]{3}/.test(norm(tr.t)))m='ad';
 const q={m,tr,rs:rnd(16),sw:rnd(2)};
 if(m=='eski')q.t2=T.find(x=>x!=tr&&!used.has(x))||T.find(x=>x!=tr);
 if(m=='ana')q.sc=tr.t.toLocaleUpperCase('tr').split(' ').map(w=>{let s=w;for(let i=0;i<6&&s==w&&w.length>1;i++)s=shuf(w.split('')).join('');return s}).join(' ');
 qs.push(q)}return qs}
 function setOpts(qs,T){qs.forEach(q=>{const tr=q.tr;
-if(q.m=='sanatci'&&new Set(T.map(x=>x.a)).size<4)q.m='ad';
 if(q.m=='yil'&&!tr.y)q.m='ad';
 if(q.m=='eski'&&!(tr.y&&q.t2&&q.t2.y&&Math.abs(tr.y-q.t2.y)>1))q.m=tr.y?'yil':'ad';
 if(q.m=='ad')q.o=opts(T,tr,'t');if(q.m=='sanatci')q.o=opts(T,tr,'a');
-if(q.m=='album'){const o=[{k:tr.al,i:tr.i}];for(const x of shuf(T))if(x.ia&&!o.some(y=>norm(y.k)==norm(x.al))){o.push({k:x.al,i:x.i});if(o.length>3)break}q.o=shuf(o);if(q.o.length<3){q.m='ad';q.o=opts(T,tr,'t')}}})}
+if(q.m=='album'){const o=[{k:tr.al,i:tr.i}];for(const x of shuf(T))if(x.ia&&!o.some(y=>norm(y.k)==norm(x.al))){o.push({k:x.al,i:x.i});if(o.length>3)break}q.o=shuf(o)}})}
 async function years(qs){const ts=new Map();qs.forEach(q=>{ts.set(q.tr.id,q.tr);if(q.t2)ts.set(q.t2.id,q.t2)});
 await Promise.all([...ts.values()].map(t=>jp('https://api.deezer.com/track/'+t.id).then(r=>{t.y=+(r.release_date||'0').slice(0,4)}).catch(()=>{})))}
 
 /* ---- Ses ---- */
 const A=new Audio();let ta;
-let VOL=.8,MUTE=0;try{if(localStorage.vol!=null)VOL=Math.min(1,Math.max(0,+localStorage.vol||0));MUTE=localStorage.mute=='1'?1:0}catch(e){}
-function applyVol(){A.volume=VOL;A.muted=!!MUTE;$('#vm').textContent=MUTE||VOL==0?'🔇':VOL<.35?'🔈':VOL<.7?'🔉':'🔊';$('#vr').value=MUTE?0:Math.round(VOL*100);try{localStorage.vol=VOL;localStorage.mute=MUTE?1:0}catch(e){}}
-$('#vr').oninput=e=>{VOL=e.target.value/100;MUTE=0;applyVol()};
-$('#vm').onclick=()=>{if(MUTE||VOL==0){MUTE=0;if(VOL==0)VOL=.5}else MUTE=1;applyVol()};
-applyVol();
 addEventListener('pointerdown',()=>{if(!A.src){A.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';A.play().catch(()=>{})}},{once:true});
 A.addEventListener('playing',()=>document.body.classList.add('air'));['pause','ended'].forEach(e=>A.addEventListener(e,()=>document.body.classList.remove('air')));
 const stopAu=()=>{clearTimeout(ta);A.pause()};
@@ -222,7 +209,7 @@ const gw=cb=>{const f=()=>{const v=$('#gi').value.trim();if(v){$('#gi').value=''
 const ok=v=>like(v,L.q.tr.t),okA=v=>like(v,L.q.tr.al);
 const pts=()=>Math.max(30,Math.round(100+100*Math.max(0,1-(Date.now()-L.t0)/1e3/QT)-20*L.w));
 function fin(p,msg){if(L.d)return;L.d=1;stopAu();$('#st').innerHTML=`<div class=res>${p?'✅':'❌'}</div><h3 class=c>${esc(msg||'')}</h3><p class="c m">+${p} puan · diğerleri bekleniyor…</p>`;ans(p)}
-function rq(i){stopAu();const q=qs[i],m=M[q.m],t=q.tr;L={i,q,m,st:0,w:0,t0:Date.now(),d:0,g:new Set()};clearInterval(tint);
+function rq(i){const q=qs[i],m=M[q.m],t=q.tr;L={i,q,m,st:0,w:0,t0:Date.now(),d:0,g:new Set()};clearInterval(tint);
 scr(`<div class=hd><span class=pill>Tur ${i+1}/${qs.length}</span><span class=mode>${m.e} ${m.n}</span><div class=ring><svg viewBox="0 0 54 54"><circle cx=27 cy=27 r=22 class=rb /><circle id=rg cx=27 cy=27 r=22 class=rf /></svg><b id=tn>${QT}</b></div></div><div class=card id=st></div><h2>Skor</h2><div class=card id=sb>${rank(0)}</div>`);
 setTimeout(()=>{const r=$('#rg');if(r){r.style.transition=`stroke-dashoffset ${QT}s linear`;r.style.strokeDashoffset=138.2}},60);
 tint=setInterval(()=>{const n=$('#tn');if(n)n.textContent=Math.max(0,QT-Math.round((Date.now()-L.t0)/1000))},500);
@@ -256,7 +243,7 @@ $('#pl').onclick=()=>play(t.p);$$('.kb button').forEach(b=>b.onclick=()=>{if(L.d
 if(!open())return fin(pts(),'Doğru!');if(L.w>=6)return fin(0,'Asıldın!');draw()})};draw()}}
 function rrev(m){stopAu();clearInterval(tint);L.d=1;P=m.P;const q=qs[m.i],t=q.tr,r=$('#rg');if(r)r.style.transition='none';
 $('#st').innerHTML=`<img class=cv src="${esc(t.i)}"><h3 class=c>${esc(t.t)}</h3><p class="c m" style="margin:0 0 12px">${esc(t.a)}${t.y?' · '+t.y:''}${t.al?'<br>💿 '+esc(t.al):''}</p>`+(q.t2?`<p class="c m">Diğer şarkı: ${esc(q.t2.t)} – ${esc(q.t2.a)}${q.t2.y?' ('+q.t2.y+')':''}</p>`:'')+(host?'<button class="btn ghost" id=nx>⏭ Sonraki tur</button>':'');
-$('#sb').innerHTML=rank(1);if(host)$('#nx').onclick=()=>{clearTimeout(tmr);nxt(cur+1)};play(t.p,0,7)}
+$('#sb').innerHTML=rank(1);if(host)$('#nx').onclick=()=>{clearTimeout(tmr);nxt(cur+1)};play(t.p,0,8)}
 function rend(){stopAu();const r=Object.values(P).sort((a,b)=>b.s-a.s);
 scr(`<div class=logo>🏆 Sonuçlar</div><p class=sub>${esc(r[0].av)} ${esc(r[0].n)} kazandı!</p><div class=card>${rank(0)}</div>`+(host?'<button class=btn id=bk>↩ Lobiye dön</button>':'<p class="c m">Oda sahibi lobiye dönünce devam edebilirsiniz…</p>')+'<div style="height:10px"></div><button class="btn ghost" id=hm>Ana sayfa</button>');
 if(host)$('#bk').onclick=()=>bc({t:'lobby',P,cfg});$('#hm').onclick=home}
