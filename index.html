@@ -105,14 +105,14 @@ function jp(u,retry=1){return new Promise((ok,no)=>{const f='d'+Math.random().to
 window[f]=d=>{clearTimeout(to);s.remove();delete window[f];ok(d)};s.onerror=()=>{clearTimeout(to);no()};s.src=u+(u.includes('?')?'&':'?')+'output=jsonp&callback='+f;document.head.append(s)})
 .then(d=>d&&d.error&&retry?new Promise(r=>setTimeout(r,1200)).then(()=>jp(u,0)):d)}
 let ARID={};try{ARID=JSON.parse(localStorage.arid||'{}')}catch(e){}
-async function top(name,lim){let id=ARID[name];
+async function topTr(name,lim){let id=ARID[name];
 if(!id){const r=await jp('https://api.deezer.com/search/artist?limit=3&q='+encodeURIComponent(name)),l=r.data||[];const a=l.find(x=>norm(x.name)==norm(name))||l[0];if(!a)return[];id=ARID[name]=a.id;try{localStorage.arid=JSON.stringify(ARID)}catch(e){}}
 const r=await jp(`https://api.deezer.com/artist/${id}/top?limit=${lim}`);
 return(r.data||[]).filter(x=>x.preview&&!BAD.test(x.title+' '+(x.album?x.album.title:''))).map(x=>({id:x.id,t:clean(x.title_short||x.title),a:x.artist.name,p:x.preview,i:x.album.cover_big,y:0,al:clean(x.album.title),ia:!/-\s*(single|ep)$/i.test(x.album.title)&&norm(clean(x.album.title))!=norm(clean(x.title_short||x.title))}))}
 async function build(){let names,lim;
 if(cfg.ar.length){names=shuf(cfg.ar).slice(0,14);lim=names.length<=3?30:names.length<=6?20:12}
 else{names=[...new Set(cfg.g.flatMap(k=>shuf(G[k].s).slice(0,Math.max(3,Math.ceil(12/cfg.g.length)))))];names=shuf(names).slice(0,14);lim=8}
-const seen=new Set(),out=[];(await Promise.all(names.map(n=>top(n,lim).catch(()=>[])))).flat().forEach(t=>{const k=norm(t.t);if(t.t&&!seen.has(k)){seen.add(k);out.push(t)}});return out}
+const seen=new Set(),out=[];(await Promise.all(names.map(n=>topTr(n,lim).catch(()=>[])))).flat().forEach(t=>{const k=norm(t.t);if(t.t&&!seen.has(k)){seen.add(k);out.push(t)}});return out}
 const opts=(T,tr,f)=>{const o=[tr[f]];for(const x of shuf(T))if(x[f]&&!o.includes(x[f])){o.push(x[f]);if(o.length>3)break}return shuf(o)};
 function mk(pool,c){const T=shuf(pool),ids=Object.keys(M).slice(0,-1),qs=[],used=new Set();
 for(let k=0;k<c.n;k++){let m=pick(c.m);if(m=='karma')m=pick(ids);const cv=['blur','tile','album'].includes(m);
