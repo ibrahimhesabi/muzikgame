@@ -199,13 +199,13 @@ $('#hm').onclick=home;if(!ed)return;
 const up=()=>bc({t:'lobby',P,cfg}),sel=(a,v)=>{const i=a.indexOf(v);if(i<0)a.push(v);else if(a.length>1)a.splice(i,1);up()},tg=(a,v)=>{const i=a.indexOf(v);i<0?a.push(v):a.splice(i,1);up()};
 $$('[data-g]').forEach(b=>b.onclick=()=>sel(cfg.g,b.dataset.g));$$('[data-m]').forEach(b=>b.onclick=()=>sel(cfg.m,b.dataset.m));
 $$('[data-t]').forEach(b=>b.onclick=()=>{atab=b.dataset.t;lobby()});$$('[data-r]').forEach(b=>b.onclick=()=>tg(cfg.ar,b.dataset.r));
-const add=()=>{const v=$('#ai').value.trim();if(v&&!cfg.ar.includes(v)){cfg.ar.push(v);up()}};$('#ab').onclick=add;$('#ai').onkeydown=e=>e.key=='Enter'&&add();
+const add=()=>{const v=$('#ai').value.trim();if(v&&!cfg.ar.includes(v)){cfg.ar.push(v);up()}};$('#ab').onclick=add;$('#ai').onkeydown=e=>{if(e.key=='Enter')add()};
 if($('#ac'))$('#ac').onclick=()=>{cfg.ar=[];up()};
 $$('[data-n]').forEach(b=>b.onclick=()=>{cfg.n=+b.dataset.n;up()});$('#go').onclick=start}
 
 /* ---- Oyun ---- */
 const gin=ph=>`<div class=row><input id=gi placeholder="${ph}" autocomplete=off autocapitalize=off spellcheck=false><button class=btn id=gb>Tahmin</button></div>`;
-const gw=cb=>{const f=()=>{const v=$('#gi').value.trim();if(v){$('#gi').value='';cb(v)}};$('#gb').onclick=f;$('#gi').onkeydown=e=>e.key=='Enter'&&f();$('#gi').focus({preventScroll:true})};
+const gw=cb=>{const f=()=>{const v=$('#gi').value.trim();if(v){$('#gi').value='';cb(v)}};$('#gb').onclick=f;$('#gi').onkeydown=e=>{if(e.key=='Enter')f()};$('#gi').focus({preventScroll:true})};
 const ok=v=>like(v,L.q.tr.t),okA=v=>like(v,L.q.tr.al);
 const pts=()=>Math.max(30,Math.round(100+100*Math.max(0,1-(Date.now()-L.t0)/1e3/QT)-20*L.w));
 function fin(p,msg){if(L.d)return;L.d=1;stopAu();$('#st').innerHTML=`<div class=res>${p?'✅':'❌'}</div><h3 class=c>${esc(msg||'')}</h3><p class="c m">+${p} puan · diğerleri bekleniyor…</p>`;ans(p)}
