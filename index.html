@@ -139,9 +139,12 @@ karma:{n:'Karma',e:'🎲',d:'Tüm oyunlar karışık gelir'}};
 /* ---- Veri: Deezer (sanatçının en çok dinlenen şarkıları, popülerlik sırasıyla) ---- */
 const BAD=/(^|[^a-z])(live|remix|karaoke|instrumental|acoustic|akustik|version|edit|demo|skit|interlude|intro|cover|tribute|piano|lullaby|slowed|sped|reverb|orchestra|mix)([^a-z]|$)|canlı/i,
 clean=s=>(s||'').replace(/\s*[\(\[].*?[\)\]]/g,'').replace(/\s+-\s+.*$/,'').trim();
-function jp(u,retry=1){return new Promise((ok,no)=>{const f='d'+Math.random().toString(36).slice(2),s=document.createElement('script'),to=setTimeout(()=>{s.remove();no()},9000);
+function jp0(u,retry=1){return new Promise((ok,no)=>{const f='d'+Math.random().toString(36).slice(2),s=document.createElement('script'),to=setTimeout(()=>{s.remove();no()},9000);
 window[f]=d=>{clearTimeout(to);s.remove();delete window[f];ok(d)};s.onerror=()=>{clearTimeout(to);no()};s.src=u+(u.includes('?')?'&':'?')+'output=jsonp&callback='+f;document.head.append(s)})
 .then(d=>d&&d.error&&retry?new Promise(r=>setTimeout(r,1200)).then(()=>jp(u,0)):d)}
+let jpT=0;
+const jp=async(u,n=3)=>{const now=Date.now(),t=Math.max(now,jpT);jpT=t+120;if(t>now)await new Promise(r=>setTimeout(r,t-now));
+const d=await jp0(u,0);if(d&&d.error&&n>1&&(d.error.code==4||d.error.code==700||!d.error.code)){await new Promise(r=>setTimeout(r,1500));return jp(u,n-1)}return d};
 let ARID={};try{ARID=JSON.parse(localStorage.arid3||'{}')}catch(e){}
 const HINT={manifest:['Zamansızdık','Toz Pembe','Hileli','Snap','Tralala'],aura:['YUH','Tuzak','PES'],karm6:['İhtimal','Blok Blok','Keşke Benim Olsa'],crush:['CRUSH'],radik5l:['Hayran'],radikal:['Hayran'],mantra:['Bi Kiss']},
 ALIAS={radik5l:['Radik5l','Radikal'],radikal:['Radik5l','Radikal']},MISS=new Set(),KNOWN=new Set(Object.values(G).flatMap(g=>g.s)),
@@ -170,13 +173,19 @@ L.sort((a,b)=>(b.rank||0)-(a.rank||0));
 if(frac>0&&L.length){const mx=L[0].rank||0,cut=L.filter(x=>(x.rank||0)>=mx*frac);L=cut.length>=minK?cut:L.slice(0,minK)}
 if(!L.length)MISS.add(name);
 return L.slice(0,lim).map((x,i)=>({id:x.id,t:clean(x.title_short||x.title),a:x.artist.name,p:x.preview,i:x.album.cover_big,y:0,pi:i,al:clean(x.album.title),ia:!/-\s*(single|ep)$/i.test(x.album.title)&&norm(clean(x.album.title))!=norm(clean(x.title_short||x.title))}))}
-async function build(){MISS.clear();let names,lim,frac,minK;
-if(cfg.ar.length){names=shuf(cfg.ar).slice(0,Math.max(14,cfg.n+2));const k=names.length;lim=k<=2?40:k<=6?20:14;frac=k<=2?0:k<=6?.1:.2;minK=k<=6?10:8}
-else{const w=Math.min(cfg.n+6,26);names=[...new Set(cfg.g.flatMap(k=>shuf(G[k].s).slice(0,Math.max(3,Math.ceil(w/cfg.g.length)))))];names=shuf(names).slice(0,w);lim=12;frac=.25;minK=6}
-const seen=new Set(),out=[],res=[];for(let i=0;i<names.length;i+=9)res.push(...await Promise.all(names.slice(i,i+9).map(n=>topTr(n,lim,frac,minK).catch(()=>[]))));res.flat().forEach(t=>{const k=norm(t.t);if(t.t&&!seen.has(k)){seen.add(k);out.push(t)}});return out}
+async function build(){MISS.clear();const seen=new Set(),out=[];
+const add=L=>L.forEach(t=>{const k=norm(t.t);if(t.t&&!seen.has(k)){seen.add(k);out.push(t)}});
+const run=async(names,g,lim,frac,minK)=>{for(let i=0;i<names.length;i+=6){const r=(await Promise.all(names.slice(i,i+6).map(n=>topTr(n,lim,frac,minK).catch(()=>[])))).flat();r.forEach(t=>t.g=g);add(r)}};
+if(cfg.ar.length){const names=shuf(cfg.ar).slice(0,Math.max(14,cfg.n+2)),k=names.length;await run(names,'',k<=2?40:k<=6?20:14,k<=2?0:k<=6?.1:.2,k<=6?10:8)}
+else{const used=new Set(),rest={},need=Math.ceil(cfg.n/cfg.g.length)+1;
+cfg.g.forEach(k=>rest[k]=shuf(G[k].s).filter(a=>!used.has(a)&&used.add(a)));
+for(const k of cfg.g)await run(rest[k].splice(0,need+2),k,10,.25,5);
+for(const k of cfg.g){let t=0;while(new Set(out.filter(x=>x.g==k).map(x=>x.a)).size<need&&rest[k].length&&t++<4)await run(rest[k].splice(0,4),k,10,.25,5)}}
+return out}
+const bal=P0=>{const g={};P0.forEach(t=>(g[t.g||'']=g[t.g||'']||[]).push(t));const ls=shuf(Object.keys(g)).map(k=>spread(g[k])),o=[];for(let i=0;ls.some(l=>i<l.length);i++)ls.forEach(l=>l[i]&&o.push(l[i]));return o};
 const spread=T=>{const S=new Set(SEEN),g={},o=[];T.forEach(t=>{(g[t.a]=g[t.a]||[]).push(t);t.k=(t.pi||0)+Math.random()*4+(S.has(t.id)?100:0)});Object.values(g).forEach(a=>a.sort((x,y)=>x.k-y.k).forEach((t,i)=>{t.o=i+Math.random()+(S.has(t.id)?50:0);o.push(t)}));return o.sort((x,y)=>x.o-y.o)};
 const opts=(T,tr,f)=>{const o=[tr[f]];for(const x of shuf(T))if(x[f]&&!o.includes(x[f])){o.push(x[f]);if(o.length>3)break}return shuf(o)};
-function mk(pool,c){const T=spread(pool),ids=Object.keys(M).slice(0,-1),qs=[],used=new Set();let la='';
+function mk(pool,c){const T=bal(pool),ids=Object.keys(M).slice(0,-1),qs=[],used=new Set();let la='';
 for(let k=0;k<c.n;k++){let m=pick(c.m);if(m=='karma')m=pick(ids);const cv=['blur','tile','album'].includes(m);
 const okx=x=>!used.has(x)&&(!cv||x.ia),tr=T.find(x=>okx(x)&&x.a!=la)||T.find(okx)||T.find(x=>!used.has(x));used.add(tr);la=tr.a;
 if(cv&&!tr.ia||(m=='ana'||m=='adam')&&!/[a-z]{3}/.test(norm(tr.t)))m='ad';
@@ -186,8 +195,8 @@ if(m=='ana')q.sc=tr.t.toLocaleUpperCase('tr').split(' ').map(w=>{let s=w;for(let
 qs.push(q)}return qs}
 function setOpts(qs,T){qs.forEach(q=>{const tr=q.tr;
 if(q.m=='sanatci'&&new Set(T.map(x=>x.a)).size<4)q.m='ad';
-if(q.m=='yil'&&!tr.y)q.m='ad';
-if(q.m=='eski'&&!(tr.y&&q.t2&&q.t2.y&&Math.abs(tr.y-q.t2.y)>1))q.m=tr.y?'yil':'ad';
+if(q.m=='yil'&&(!tr.y||tr.y<1960||tr.y>2026))q.m='ad';
+if(q.m=='eski'&&!(tr.y&&q.t2&&q.t2.y&&Math.abs(tr.y-q.t2.y)>1))q.m=tr.y>=1960&&tr.y<=2026?'yil':'ad';
 if(q.m=='ad')q.o=opts(T,tr,'t');if(q.m=='sanatci')q.o=opts(T,tr,'a');
 if(q.m=='album'){const o=[{k:tr.al,i:tr.i}];for(const x of shuf(T))if(x.ia&&!o.some(y=>norm(y.k)==norm(x.al))){o.push({k:x.al,i:x.i});if(o.length>3)break}q.o=shuf(o);if(q.o.length<3){q.m='ad';q.o=opts(T,tr,'t')}}})}
 async function years(qs){const ts=new Map();qs.forEach(q=>{ts.set(q.tr.id,q.tr);if(q.t2)ts.set(q.t2.id,q.t2)});
@@ -320,7 +329,7 @@ function rend(){stopAu();const r=Object.values(P).sort((a,b)=>b.s-a.s);
 scr(`<div class=logo>🏆 Sonuçlar</div><p class=sub>${esc(r[0].av)} ${esc(r[0].n)} kazandı!</p><div class=card>${rank(0)}</div>`+(host?'<button class=btn id=bk>↩ Lobiye dön</button>':'<p class="c m">Oda sahibi lobiye dönünce devam edebilirsiniz…</p>')+'<div style="height:10px"></div><button class="btn ghost" id=hm>Ana sayfa</button>','Sonuçlar');
 if(host)$('#bk').onclick=()=>bc({t:'lobby',P,cfg});$('#hm').onclick=home}
 /* ---- Açık Arttırma ---- */
-const AUC=20,AUN=5,AUT0=14,AUT1=7;
+const AUC=30,AUN=10,AUT0=14,AUT1=7;
 const CE={
 tsing:{n:'Türk Ünlüler',d:'Şarkıcılar',e:'🎤',l:[
 ['Tarkan','Pop',5],['Sezen Aksu','Pop',5],['Ajda Pekkan','Pop',5],['Barış Manço','Rock',5],['Müslüm Gürses','Arabesk',5],['İbrahim Tatlıses','Arabesk',5],['Zeki Müren','Sanat Müziği',5],['Bülent Ersoy','Sanat Müziği',5],
@@ -355,8 +364,8 @@ async function astart(){inGame=1;rv=1;bc({t:'au_load'});
 if(Object.keys(P).length<2)P.bot={n:'Bot',av:'🤖',s:0,bot:1};
 Object.values(P).forEach(p=>{p.m=AUC;p.it=[];p.s=0;p.d=0});
 const all=shuf(cfg.ac.flatMap(k=>CE[k].l.map(x=>({n:x[0],sub:x[1],st:x[2],k})))),fresh=all.filter(c=>!AH.includes(c.n)),src=fresh.length>=AUN*2?fresh:all,cs=[],cnt={};
-for(const c of src){if(cs.length>=AUN)break;if(c.k=='tmem'&&(cnt[c.sub]||0)>=2)continue;cnt[c.sub]=(cnt[c.sub]||0)+1;cs.push(c)}
-for(const c of all){if(cs.length>=AUN)break;if(!cs.includes(c))cs.push(c)}
+const Q={5:2,4:3,3:3,2:2};for(const c of src){if(cs.length>=AUN)break;if(!Q[c.st]||(c.k=='tmem'&&(cnt[c.sub]||0)>=2))continue;Q[c.st]--;cnt[c.sub]=(cnt[c.sub]||0)+1;cs.push(c)}
+for(const c of src.concat(all)){if(cs.length>=AUN)break;if(!cs.includes(c))cs.push(c)}cs.sort(()=>Math.random()-.5);
 await Promise.all(cs.map(c=>Promise.race([face(c),new Promise(r=>setTimeout(r,6000))]).catch(()=>{})));
 AH=AH.concat(cs.map(c=>c.n)).slice(-70);try{localStorage.auh=JSON.stringify(AH)}catch(e){}
 bc({t:'au_start',cs,P});aRound(0)}
@@ -376,9 +385,9 @@ function aBot(first){const b=P.bot;if(!b||!AUs||AUs.done||AUs.fin||AUs.pass.bot|
 AUs.bt=setTimeout(()=>{if(!AUs||AUs.done||AUs.fin||AUs.pass.bot||AUs.lead=='bot')return;
 const nb=AUs.bid+1+(Math.random()<.3?1:0);
 if(nb<=AUs.bl&&nb<=b.m)aBid('bot',nb);else{AUs.pass.bot=1;aUpd();aCheck()}},first?2000+Math.random()*3500:1200+Math.random()*2200)}
-function aClose(){if(!AUs||AUs.done)return;AUs.done=1;clearTimeout(AUs.tm);clearTimeout(AUs.bt);const c=AV.cs[AUs.i],w=AUs.lead&&P[AUs.lead]?AUs.lead:null;
+function aClose(){if(!AUs||AUs.done)return;AUs.done=1;clearTimeout(AUs.tm);clearTimeout(AUs.bt);const c=AV.cs[AUs.i],w0=AUs.lead&&P[AUs.lead]?AUs.lead:null,fr=!w0,w=w0||pick(Object.keys(P));if(fr)AUs.bid=0;
 if(w){P[w].m-=AUs.bid;P[w].it.push({n:c.n,st:c.st});P[w].s=P[w].it.reduce((a,x)=>a+x.st,0)}
-bc({t:'au_sold',i:AUs.i,w,price:w?AUs.bid:0,P});AUs.tm=setTimeout(aNext,5500)}
+bc({t:'au_sold',i:AUs.i,w,price:AUs.bid,fr,P});AUs.tm=setTimeout(aNext,5500)}
 function aNext(){if(!AUs)return;clearTimeout(AUs.tm);AUs.i+1<AV.cs.length?aRound(AUs.i+1):aEnd()}
 function aEnd(){inGame=0;rv=0;if(AUs){clearTimeout(AUs.tm);clearTimeout(AUs.bt)}AUs=null;bc({t:'au_end',P})}
 function aLeave(){if(!AUs)return;if(Object.keys(P).length<2)return aEnd();aUpd();aCheck()}
@@ -388,7 +397,7 @@ if(m.t=='au_load')scr('<div class="card c" style="margin-top:28vh"><div class=eq
 else if(m.t=='au_start'){AV={cs:m.cs,i:0,bid:0,lead:null,pass:[]};P=m.P}
 else if(m.t=='au_round'){AV.i=m.i;AV.bid=0;AV.lead=null;AV.pass=[];AV.tot=m.ms;AV.dl=Date.now()+m.ms;P=m.P;auR()}
 else if(m.t=='au_upd'){AV.bid=m.bid;AV.lead=m.lead;AV.pass=m.pass;AV.tot=Math.max(1000,m.ms);AV.dl=Date.now()+m.ms;P=m.P;auR()}
-else if(m.t=='au_sold'){AV.w=m.w;AV.price=m.price;P=m.P;auS()}
+else if(m.t=='au_sold'){AV.w=m.w;AV.price=m.price;AV.fr=m.fr;P=m.P;auS()}
 else if(m.t=='au_end'){P=m.P;auE()}}
 function auR(){clearInterval(tint);const c=AV.cs[AV.i],me=myId(),pm=P[me]||{m:0},ld=P[AV.lead],pass=AV.pass.includes(me),isL=AV.lead==me,can=!pass&&!isL&&AV.bid<pm.m;
 const bt=n=>{const a=AV.bid+n;return `<button class=btn data-b="${a}" ${can&&a<=pm.m?'':'disabled'}>+$${n}<small>→ $${a}</small></button>`};
@@ -401,7 +410,7 @@ $$('[data-b]').forEach(b=>b.onclick=()=>aSend({t:'au_bid',amt:+b.dataset.b}));$(
 const tk=()=>{const r=Math.max(0,AV.dl-Date.now()),t=$('#atm'),b=$('#abar');if(t)t.textContent='⏱ '+Math.ceil(r/1000)+' sn';if(b)b.style.width=Math.min(100,100*r/AV.tot)+'%'};tk();tint=setInterval(tk,150)}
 function auS(){clearInterval(tint);const c=AV.cs[AV.i],w=P[AV.w];
 scr(`<div class=hd><span class=pill>Tur ${AV.i+1}/${AV.cs.length}</span><span class=mode>💸 Açık Arttırma</span><span class=pill>${w?'SATILDI':'SATILMADI'}</span></div>
-<div class="card c">${avt(c)}<h3 style="font-size:24px">${esc(c.n)}</h3><div class=stars>${stars(c.st)}</div>${w?`<div class=res style="font-size:44px">🔨</div><h3>${esc(w.av+' '+w.n)} aldı</h3><p class=m>$${AV.price} ödedi · +${c.st} puan</p>`:`<div class=res style="font-size:44px">🤷</div><h3>Kimse almadı</h3>`}</div>
+<div class="card c">${avt(c)}<h3 style="font-size:24px">${esc(c.n)}</h3><div class=stars>${stars(c.st)}</div>${w?`<div class=res style="font-size:44px">🔨</div>${AV.fr?`<h3>🎲 Kimse teklif vermedi</h3><p class=m>Rastgele <b>${esc(w.av+' '+w.n)}</b> kazandı · bedava · +${c.st} puan</p>`:`<h3>${esc(w.av+' '+w.n)} aldı</h3><p class=m>$${AV.price} ödedi · +${c.st} puan</p>`}`:`<div class=res style="font-size:44px">🤷</div><h3>Kimse almadı</h3>`}</div>
 <h2>Durum</h2><div class=card>${plist()}</div>`+(host?'<button class="btn ghost" id=nx>⏭ Sonraki</button>':'<p class="c m">Sıradaki ünlü birazdan…</p>'),'Açık Arttırma · Tur '+(AV.i+1)+'/'+AV.cs.length);
 if(host)$('#nx').onclick=aNext}
 function auE(){clearInterval(tint);stopAu();const r=Object.values(P).map(p=>({...p,tot:(p.it||[]).reduce((a,x)=>a+x.st,0)})).sort((a,b)=>b.tot-a.tot||b.m-a.m),tie=r.length>1&&r[0].tot==r[1].tot&&r[0].m==r[1].m;
